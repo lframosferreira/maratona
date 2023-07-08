@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+using namespace std;
+    
 int main() {
     int t;cin>>t;
 
@@ -9,22 +11,18 @@ int main() {
         for (int i=0;i<n;i++) {
             cin>>v.at(i);
         }
-        vector<vector<int>> absdiff(n, vector<int>(n));
-        for (int i=0;i<n;i++){
-            for (int j=0;j<n;j++){
-                absdiff.at(i).at(j) = abs(v.at(i) - v.at(j));
-            }
+        sort(v.begin(), v.end());
+        vector<int> res;
+        int i=0;int j=n-1;
+        while (i < j){
+            res.push_back(v.at(i++));
+            res.push_back(v.at(j--));
+            if (i==j) res.push_back(v.at(i));
         }
-
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                cout << absdiff.at(i).at(j) << " ";
-            }
-            cout << endl;
-        }
+        reverse(res.begin(), res.end());
+        for (auto e: res) cout << e << " ";
+        cout << endl;
     }
-
-
 
     return 0;
 }
