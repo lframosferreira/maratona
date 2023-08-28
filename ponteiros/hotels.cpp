@@ -22,19 +22,17 @@ int main(){ _
     	cout << 1 << endl; exit(0);
     }
     int ans = -INF;
-    int i = 0; int j = 0;
-    int sum = 0;
-    while (j < n){
-	cout << i << " " << j << endl;
-	cout << sum << endl;
-	cout << "---------" << endl;
+    int i = 0; int j = 1;
+    int sum = v[0];
+    while (j <= n){
 	if (sum == m){
 	    ans = m;
+        break;
 	}
 	else if (sum < m) {
-	    ans = max(ans, sum);
-	    sum += v[j];
-	    j++;
+        ans = max(sum, ans);
+        sum += v[j];
+        j++;
 	} else {
 	    sum -= v[i];
 	    i++;
