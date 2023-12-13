@@ -1,0 +1,1 @@
+costa2 tem uma solução porca sem BFS do problema
