@@ -50,7 +50,7 @@ int main(){ _
     visited[aux.f][aux.s] = true;
     for (auto move: moves){
       pii pos = {aux.f + move.f, aux.s + move.s};
-      if (!oob(pos, l, c) && mapa[pos.f][pos.s] == 'H'){
+      if (!oob(pos, l, c) && mapa[pos.f][pos.s] == 'H' && !visited[pos.f][pos.s]){
         q.push(pos);
       }
     }
