@@ -15,6 +15,12 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
-    exit(0);
+  int n, k;
+  cin >> n >> k;
+  vector<int> h(n);
+  for (int i = 0; i < n; i++){
+    cin >> h[i];
+  }
+
+  exit(0);
 }

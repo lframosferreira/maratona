@@ -16,10 +16,10 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int main(){ 
     int n,m;
     cin >>n >>m;
-    vector<bool> visited(n, false);
+  vector<bool> visited(n+ 1, false);
     vector<vector<int>> g(n+1);
-    vector<vector<int>> paths;
     int a, b;
+    vector<int> parent(n+1);
     while (m--){
         cin >> a >> b;
         g[a].push_back(b);
@@ -30,25 +30,34 @@ int main(){
     q.push({1, 0});
     int res = -1;
     while (!q.empty()){
-
         pii k = q.front();
         q.pop();
-        visited[k.f] = true;
         if (k.f == n){
             res = k.s;
             break;
         }
         for (auto neigh : g[k.f]){
             if (!visited[neigh]){
+                visited[neigh] = true;
                 q.push({neigh, k.s + 1});
+                parent[neigh] = k.f;
             }
         }
-
+  }
+  if (res == -1){
+    cout << "IMPOSSIBLE\n" << endl;
+  } else {
+    cout << res + 1 << endl;
+    vector<int> path;
+    int node = n;
+    while (node != 1){
+      path.push_back(node);
+      node = parent[node];
     }
-    if (res == -1){
-        cout << "IMPOSSIBLE\n" << endl;
-    } else {
-        cout << res + 1<< endl;
+    path.push_back(1);
+    for (auto iter = path.end() - 1; iter >= path.begin(); iter--) {
+      cout << *iter << " ";
     }
-    exit(0);
+  }
+  exit(0);
 }
