@@ -14,22 +14,27 @@ typedef pair<int , int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+int best[100][10001] = {0};
+
 int main(){ _
-  int n, k;
-  cin >> n >> k;
-  vector<int> h(n);
+  
+  int n, W;
+  cin >> n >> W;
+  vector<int> w(n);
+  vector<int> v(n);
   for (int i = 0; i < n; i++){
-    cin >> h[i];
+    cin >> w[i] >> v[i];
   }
-  vector<int> best(n, INF);
-  best[0] = 0;
+  best[0][0] = 0;
   for (int i = 1; i < n; i++){
-    for (int j = 1; j<=k; j++){
-      if (i - j < 0) continue;
-      best[i] = min(best[i-j] + abs(h[i] - h[i-j]), best[i]);
+    for (int j = 0; j <= W; j++){
+      best[i][j] = best[i-1][j]; 
+      if (w[i] < j && best[i-1][j-w[i]] + v[i] > best[i][j]){
+        best[i][j] = best[i-1][j-w[i]] + v[i]; 
+      }
     }
   }
-   cout << best[n-1] << endl;
-
+  cout << best[n][W] << endl; 
+  
   exit(0);
 }
