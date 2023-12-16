@@ -2,52 +2,33 @@
 
 using namespace std;
 
-void swap(int& a, int& b)
-{
-    int aux = a;
-    a = b;
-    b = aux;
-};
+#define _ ios_base::sync_with_stdio(0);cin.tie(0);
+#define endl '\n'
+#define f first
+#define s second
+#define pb push_back
 
-int main()
-{
-    int count = 0;
-    vector<pair<int, int>> p;
-    int n; cin >> n;
-    int v[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> v[i];
-    };
+typedef long long ll;
+typedef pair<int , int> pii;
 
-    for (int i = 0; i < n; i++)
-    {
-        int* min = &v[i];
-        int curr_j;
-        bool troca = false;
-        for (int j = i + 1; j < n; j++)
-        {
-            if (v[j] < *min)
-            {
-            min = &v[j]; 
-            curr_j = j; 
-            troca = true; 
-            }
-        }
-        if (troca)
-        {
-            auto aux = v[i];
-            v[i] = *min;
-            *min = aux;
-            count++;
-            p.push_back({i, curr_j});
-        }
-    }
+const int INF = 0x3f3f3f3f;
+const ll LINF = 0x3f3f3f3f3f3f3f3fll;
+
+// trying with selection sort
+
+int main(){ _
   
-    cout << count << endl;
-    for (auto e: p)
-    {
-        cout << e.first << " " << e.second << endl;
+    int n; cin >> n;
+    vector<int> v(n, 0);
+    for (int i = 0;i <n;i++) cin >> v[i];
+    cout << n << endl;
+    for (int i = 0; i <n ; i++){
+      auto it = min_element(v.begin() + i, v.end());
+      int aux = v[i];
+      v[i]  = *it;
+      *it = aux;
+      cout << i << " " << distance(v.begin(), it) << endl;
     }
-
-};
+    for (auto e: v) cout << e << " ";cout << endl;
+    exit(0);
+}
