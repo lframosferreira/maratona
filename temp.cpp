@@ -6,7 +6,7 @@ using namespace std;
 #define endl '\n'
 #define f first
 #define s second
-#define pb push_back()
+#define pb push_back
 
 typedef long long ll;
 typedef pair<int , int> pii;
