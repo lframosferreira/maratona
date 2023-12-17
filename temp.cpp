@@ -1,3 +1,5 @@
+// pescoço pra baixo é canela
+
 #include <bits/stdc++.h>
 
 using namespace std;

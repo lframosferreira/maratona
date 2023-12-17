@@ -29,6 +29,5 @@ int main(){ _
       *it = aux;
       cout << i << " " << distance(v.begin(), it) << endl;
     }
-    for (auto e: v) cout << e << " ";cout << endl;
     exit(0);
 }
