@@ -10,6 +10,8 @@ using namespace std;
 #define s second
 #define pb push_back
 
+#define dbg(x) cout << #x << " = " << x << endl
+
 typedef long long ll;
 typedef pair<int , int> pii;
 

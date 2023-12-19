@@ -10,6 +10,8 @@ using namespace std;
 #define s second
 #define pb push_back
 
+#define dbg(x) cout << #x << " = " << x << endl
+
 typedef long long ll;
 typedef pair<int , int> pii;
 
@@ -17,18 +19,16 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    int t; cin >> t;
-    while (t--){
-        ll x, y, a, b;
-        cin >> x >> y;
-        cin >> a >> b;
-        ll ans = 0;
-        if (2*a < b){
-            ans = (x+y)*a; 
-        }else{
-            ans = min(x,y)*b + (max(x,y)-min(x,y))*a;
-        }
-        cout << ans << endl;
+    int n; cin >> n;
+    string name;
+    set<string> s;
+    while (n--){
+       cin >> name;
+       s.insert(name);
     }    
+    for (int i = 0; i < s.size(); i++){
+        cout << s.top() << endl;
+        s.remove(s.top());
+    }
     exit(0);
 }
