@@ -20,22 +20,16 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
     int n; cin >> n;
-    string name;
-    stack<string> st;
-    set<string> s;
-    while (n--){
-       cin >> name;
-       st.push(name);
-       s.insert(name);
+    vector < int> v(n);
+    for (int &i : v) cin >> i;
+    int ans = -INF;
+    int curr = -INF;
+    for (int i = 0; i < n; i++){
+        curr = max(curr, 0);
+        curr += v[i];
+        ans = max(ans, curr);
     }
-    int k = st.size(); 
-    for (int i = 0; i < k; i++){
-        name = st.top();
-        if (s.count(name) == 1){
-            cout << name << endl;
-            s.erase(name);
-        }
-        st.pop();
-    }
+    cout << ans << endl;
+        
     exit(0);
 }

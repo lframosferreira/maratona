@@ -20,22 +20,24 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
     int n; cin >> n;
-    string name;
-    stack<string> st;
-    set<string> s;
-    while (n--){
-       cin >> name;
-       st.push(name);
-       s.insert(name);
+    vector<pii> v(n);
+    for (int i = 0; i < n; i++){
+        int l, r;
+        cin >> l >> r;
+        v[i] = {l,r};
     }
-    int k = st.size(); 
-    for (int i = 0; i < k; i++){
-        name = st.top();
-        if (s.count(name) == 1){
-            cout << name << endl;
-            s.erase(name);
-        }
-        st.pop();
+    sort(v.begin(), v.end(), [](auto a, auto b){
+            if (a.s == b.s) return a.f < b.f;
+            return a.s < b.s;
+            });
+    int ans = 0;
+    int prev = -1;
+    for (auto &p: v){
+        if (p.f > prev){
+            ans++;
+            prev = p.s;
+        } 
     }
+    cout << ans << endl;
     exit(0);
 }

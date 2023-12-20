@@ -19,23 +19,16 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    int n; cin >> n;
-    string name;
-    stack<string> st;
-    set<string> s;
-    while (n--){
-       cin >> name;
-       st.push(name);
-       s.insert(name);
-    }
-    int k = st.size(); 
-    for (int i = 0; i < k; i++){
-        name = st.top();
-        if (s.count(name) == 1){
-            cout << name << endl;
-            s.erase(name);
-        }
-        st.pop();
-    }
+    int t; cin >> t;
+    while (t--){
+        int n, k;
+        cin >> n >> k;
+        int c = 0;
+        int ans = 0;
+        int aux = k/(n-1) + (k%(n-1)==0 ? 0 : 1);
+        c = aux * n;
+        ans = c - (aux*(n-1)-k) - 1;
+        cout << ans << endl;
+    }    
     exit(0);
 }
