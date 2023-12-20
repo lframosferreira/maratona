@@ -21,21 +21,21 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int main(){ _
     int n, m; cin >> n >> m;
     vector<int> v(n);
-    for (int &i: v) cin >> i;    
-    int l=0; int r=n-1;
-    int idx = -1;
-    int ans = 0;
-    while (l <= r){
-       if (l==m) idx = r;
-       else if (r==m) idx = l;
-       else idx = v[l] < v[r] ? l : r;
-       ans += abs(m - v[idx]);
-       if (idx==l) v[idx+1] += m - v[idx];
-       else v[idx-1] += m - v[idx];
-       v[idx] = m;
-       if (idx==l)l++;
-       else r--;
-    }
+    for (int &i: v) cin >> i;
+    ll ans = 0;
+    int prev = -INF;
+    for (int i = 0; i < n; i++){
+      if (min(v[i], m-v[i]) >= prev){
+        ans += min(v[i],m-v[i]);
+        prev = min(v[i], m-v[i]);
+      }else if (max(v[i], m-v[i]) >= prev){
+        ans += max(v[i],m-v[i]);
+        prev = max(v[i], m-v[i]);
+      }else {
+        ans = -1; 
+        break;
+      } 
+    }    
     cout << ans << endl;
     exit(0);
 }
