@@ -13,47 +13,45 @@ using namespace std;
 #define dbg(x) cout << #x << " = " << x << endl
 
 typedef long long ll;
-typedef pair<int , int> pii;
-
-class Compare{
-    public:
-        bool operator()(pair<pair<ll,ll>, ll> a, pair<pair<ll,ll>, ll> b){
-            return a.f.s >= b.f.s;
-        }
-};
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e5 + 10;
-vector<pair<pair<ll,ll>, ll>> g[MAX];
 
-int main(){ 
-    int N, M, X, Y; cin >> N >> M >> X >> Y;
+vector<pair<pll, ll>> g[MAX];
+
+int main(){ _ 
+    int N, M, X, Y; 
+    cin >> N >> M >> X >> Y;
     int A, B;
     ll T, K;
     while(M--){
         cin >> A >> B >> T >> K;
-        g[A].pb({{B, T}, K});
-        g[B].pb({{A, T}, K});
+        g[A].pb({{T, B}, K});
+        g[B].pb({{T, A}, K});
     }
     vector<ll> dists(N+1, LINF);  
-    priority_queue<pair<pair<ll,ll>, ll>, vector<pair<pair<ll,ll>, ll>>, Compare> pq;
-    pq.push({{X, 0}, 1});
+    priority_queue<pll, vector<pll>, greater<pll>> pq;
+    pq.emplace(0, X);
     ll ans = -1;
     while (!pq.empty()){
-        auto aux = pq.top();
+        auto [w, u] = pq.top();
         pq.pop();
-        dists[aux.f.f] = min(dists[aux.f.f], aux.f.s); 
-        if (aux.f.f == Y){
-            ans = aux.f.s;
+        if (w > dists[u]) continue;
+        dists[u] = w; 
+        if (u == Y){
+            ans = dists[u];
             break;
         }
-        for (auto neigh : g[aux.f.f]){
-            if (dists[neigh.f.f] == LINF){
-                int mod = aux.f.s % neigh.s;
-                if (mod == 0) pq.push({{neigh.f.f, neigh.f.s + aux.f.s}, neigh.s});
-                else pq.push({{neigh.f.f, neigh.f.s + aux.f.s + (neigh.s - aux.f.s%neigh.s)}, neigh.s});
+        for (auto [aux, wait]: g[u]){
+            auto [v_w, v] = aux;
+            if (dists[v] == LINF){
+                int mod = w % wait;
+                if (mod == 0) pq.emplace(v_w + w, v);
+                else pq.emplace(v_w + w + wait - mod, v);
            } 
         }
     }

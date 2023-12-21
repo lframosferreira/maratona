@@ -18,13 +18,6 @@ typedef pair<int , int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-class Compare{
-    public:
-        bool operator()(pii a, pii b){
-            return a.s >= b.s;
-        }
-};
-
 const int MAX = 1000+10;
 
 int main(){ _
@@ -34,29 +27,32 @@ int main(){ _
         int A, B, W;
         while (M--){
             cin >> A >> B >> W;
-            g[A].pb({B, W});
-            g[B].pb({A, W});
+            g[A].pb({W, B});
+            g[B].pb({W, A});
         }
+        int ans = -INF;
         vector<int> hosp(Q);
         for (int i = 0; i < Q; i++){
             cin >> hosp[i];
-            if (i!=0) g[hosp[0]].pb({hosp[i], 0});
+            if (i!=0) g[hosp[0]].pb({0, hosp[i]});
         }
         int src = hosp[0];
         vector<int> dists(N+1, INF);
-        priority_queue<pii, vector<pii>, Compare> pq;        
-        pq.push({src, 0}); 
+        priority_queue<pii, vector<pii>, greater<pii>> pq;        
+        pq.emplace(0, src); 
         while (!pq.empty()){
-            pii aux = pq.top();
+            auto [w, u] = pq.top();
             pq.pop();
-            dists[aux.f] = min(dists[aux.f], aux.s);
-            for (auto neigh: g[aux.f]){
-                if (dists[neigh.f] == INF){
-                    pq.push({neigh.f, aux.s + neigh.s});
+            if (w > dists[u]) continue;
+            ans = max(ans, w);
+            dists[u] = w;
+            for (auto [v_w, v]: g[u]){
+                if (dists[v] == INF){
+                    pq.emplace(w + v_w, v);
                 }
             }
         }
-        cout << *max_element(dists.begin()+1, dists.end()) << endl;
+        cout << ans << endl;
     }
     exit(0);
 }
