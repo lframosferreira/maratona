@@ -23,28 +23,29 @@ class Compare{
         bool operator()(pii a, pii b){
             return a.s >= b.s;
         }
-
 };
 
 const int MAX = 1000+10;
-vector<pii> g[MAX];
 
-int main(){
+int main(){ _
     int N, M, Q; 
-    vector<int> global_dists(N+1, INF);
-    cin >> N >> M >> Q;
-    int A, B, W;
-    while (M--){
-        cin >> A >> B >> W;
-        g[A].pb({B, W});
-        g[B].pb({A, W});
-    }
-    vector<int> hosp(Q);
-    for (int &h: hosp) cin >> h;
-    for (int &h: hosp){
+    while(cin >> N >> M >> Q){
+        vector<pii> g[MAX];
+        int A, B, W;
+        while (M--){
+            cin >> A >> B >> W;
+            g[A].pb({B, W});
+            g[B].pb({A, W});
+        }
+        vector<int> hosp(Q);
+        for (int i = 0; i < Q; i++){
+            cin >> hosp[i];
+            if (i!=0) g[hosp[0]].pb({hosp[i], 0});
+        }
+        int src = hosp[0];
         vector<int> dists(N+1, INF);
         priority_queue<pii, vector<pii>, Compare> pq;        
-        pq.push({h, 0}); 
+        pq.push({src, 0}); 
         while (!pq.empty()){
             pii aux = pq.top();
             pq.pop();
@@ -55,9 +56,7 @@ int main(){
                 }
             }
         }
-        for (int i = 0; i < N; i++) global_dists[i] = min(global_dists[i], dists[i]);
+        cout << *max_element(dists.begin()+1, dists.end()) << endl;
     }
-    cout << *max_element(global_dists.begin(), global_dists.end()) << endl;
-
     exit(0);
 }
