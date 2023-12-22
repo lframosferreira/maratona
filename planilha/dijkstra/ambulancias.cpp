@@ -40,14 +40,16 @@ int main(){ _
         vector<int> dists(N+1, INF);
         priority_queue<pii, vector<pii>, greater<pii>> pq;        
         pq.emplace(0, src); 
+        int ok = 0;
         while (!pq.empty()){
             auto [w, u] = pq.top();
             pq.pop();
             if (w > dists[u]) continue;
-            ans = max(ans, w);
             dists[u] = w;
+            ans=max(ans, w);
+            ok++;
             for (auto [v_w, v]: g[u]){
-                if (dists[v] == INF){
+                if (dists[v] > w+v_w){
                     pq.emplace(w + v_w, v);
                 }
             }

@@ -37,22 +37,19 @@ int main(){ _
     for (int i = 1; i <= n; i++) cin >> a[i];
     for (int i = 1; i <= n; i++){
         vector<ll> dists(n+1, LINF);
-        vector<bool> vis(n+1, false);
         priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
         pq.emplace(0, i);
         while (!pq.empty()){
-            auto [w, u] = pq.top();
-            pq.pop();
-            costs[i] = min(costs[i], 2*w + a[u]);
-            vis[u] = true;
-            for (auto [v_w, v]: g[u]){
-                if (w+v_w <= dists[v]) {
-                    dists[v] = v_w + w;
-                    if(!vis[v]){
-                        pq.emplace(v_w + w, v);
-                    }
-                }
+          auto [w, u] = pq.top();
+          pq.pop();
+          if (w>dists[u]) continue;
+          costs[i] = min(costs[i], 2*w + a[u]);
+          for (auto [v_w, v]: g[u]){
+            if (dists[v] > w+v_w) {
+              dists[v] = v_w + w;
+              pq.emplace(v_w + w, v);
             }
+          }
         }
     } 
 
