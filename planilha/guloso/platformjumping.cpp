@@ -18,7 +18,7 @@ typedef pair<int , int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int main(){ 
+int main(){ _ 
     int n, m, d; cin >> n >> m >> d;
     vector<int> plat(m);
     vector<int> ans(n+2);
@@ -32,25 +32,24 @@ int main(){
         int p = plat[i];
         int pos_idx = idx + d + p - 1;
         int diff = n - pos_idx - (plat_count-p);
-        if (diff >= 0){
-            plat_count -= p;
-            idx += min(n, pos_idx);
+        if (diff >= 0){ 
+            idx = min(n, pos_idx-p+1); 
         } else {
-            if (abs(diff) > d){
-                cout << "NO" << endl;
-                exit(0);
-            }else {
-                plat_count -= p;
-                idx += min(n, pos_idx - abs(diff));
-            }
+            idx = min(n, pos_idx-p+1 - abs(diff));
         }
+        plat_count-=p;
         for (int j = idx; j < idx+p; j++){
             ans[j] = i+1;
         }
         idx+=p-1;
     }
-    cout << "YES" << endl;
-    for (int i = 1; i <= n; i++) cout << ans[i] << " ";
-    cout << endl;
+    if (idx + d >= n+1){
+        cout << "YES" << endl;
+        for (int i = 1; i <= n; i++) cout << ans[i] << " ";
+        cout << endl;
+    } else {
+        cout << "NO" << endl;
+    }
     exit(0);
+
 }
