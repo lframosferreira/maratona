@@ -18,40 +18,39 @@ typedef pair<int , int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int main(){ _
+int main(){ 
     int n, m, d; cin >> n >> m >> d;
     vector<int> plat(m);
     vector<int> ans(n+2);
-    for (int &p: plat) cin >> p;
-    if (d > n){
-        cout << "YES" << endl;
-        int c = 0;
-        for (int &p: plat){
-           for (int i = c; i <= c + p - 1; i++){
-             ans[i] = p;
-           }  
-           c +=p;
-        }
-        for (int &a: ans) cout << a << " ";
-        cout << endl;
-        exit(0);
+    int plat_count = 0;
+    for (int &p: plat){
+        cin >> p;
+        plat_count+=p;
     }
     int idx = 0;
-    int c = 1;
-    for (int &p: plat){
-        for (int i = idx + d; i <= idx + d + p - 1; i++){
-           ans[i] = c;  
+    for (int i = 0; i < m; i++){
+        int p = plat[i];
+        int pos_idx = idx + d + p - 1;
+        int diff = n - pos_idx - (plat_count-p);
+        if (diff >= 0){
+            plat_count -= p;
+            idx += min(n, pos_idx);
+        } else {
+            if (abs(diff) > d){
+                cout << "NO" << endl;
+                exit(0);
+            }else {
+                plat_count -= p;
+                idx += min(n, pos_idx - abs(diff));
+            }
         }
-        c++;
-        idx+=d+p-1; 
+        for (int j = idx; j < idx+p; j++){
+            ans[j] = i+1;
+        }
+        idx+=p-1;
     }
-    idx +=d;
-    if (idx > n){
-        cout << "YES" << endl;
-        for (int i = 1; i <= n; i++) cout << ans[i] << " ";
-        cout << endl;
-    } else {
-        cout << "NO" << endl;
-    }
+    cout << "YES" << endl;
+    for (int i = 1; i <= n; i++) cout << ans[i] << " ";
+    cout << endl;
     exit(0);
 }

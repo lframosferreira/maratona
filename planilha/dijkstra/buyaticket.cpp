@@ -21,40 +21,39 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 const int MAX = 2e5 + 10;
 
 vector<pair<ll, int>> g[MAX];
-//IDEIA
-//COLOCAR PESOS DOBRADOS PRA JA CONTABILIZAR VOLTA
+
 int main(){ _ 
     int n, m; cin >> n >> m;
     vector<ll> a(n+1);
-    vector<ll> costs(n+1, LINF);
     int vi, ui;
     ll wi;
     while (m--){
        cin >> vi >> ui >> wi;
-       g[vi].pb({wi, ui}); 
-       g[ui].pb({wi, vi}); 
+       g[vi].pb({2*wi, ui}); 
+       g[ui].pb({2*wi, vi}); 
     } 
-    for (int i = 1; i <= n; i++) cin >> a[i];
     for (int i = 1; i <= n; i++){
-        vector<ll> dists(n+1, LINF);
-        priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
-        pq.emplace(0, i);
-        while (!pq.empty()){
-          auto [w, u] = pq.top();
-          pq.pop();
-          if (w>dists[u]) continue;
-          costs[i] = min(costs[i], 2*w + a[u]);
-          for (auto [v_w, v]: g[u]){
+        cin >> a[i];
+        g[0].pb({a[i], i});
+        g[i].pb({a[i], 0});
+    }
+    vector<ll> dists(n+1, LINF);
+    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
+    pq.emplace(0, 0);
+    while (!pq.empty()){
+        auto [w, u] = pq.top();
+        pq.pop();
+        if (w>dists[u]) continue;
+        for (auto [v_w, v]: g[u]){
             if (dists[v] > w+v_w) {
-              dists[v] = v_w + w;
-              pq.emplace(v_w + w, v);
+                dists[v] = v_w + w;
+                pq.emplace(v_w + w, v);
             }
-          }
         }
     } 
 
     for (int i = 1; i <= n; i++){
-        cout << costs[i] << " ";
+        cout << dists[i] << " ";
     }
     cout << endl;
     exit(0);
