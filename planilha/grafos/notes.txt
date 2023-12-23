@@ -1,1 +1,0 @@
-Tenho a impressão que a especificação do problema da costa está errado. A solução correta do teste dois seria 20
