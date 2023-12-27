@@ -20,23 +20,38 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
     int n; cin >> n;
-    vector<int> v(n);
-    vector<pii> dp(n);
-    for (int &i : v) cin >> i;
-    dp[0] = {1, 0};
-    for (int i = 1; i< n; i++){
-       auto [s, idx] = dp[i-1];
-       if (v[idx] + 1 == v[i]) dp[i] = { s+1, i};
-       else dp[i] = {s, idx};
-    }
-    int pos = 0; ll mxn = dp[0].f;
-    for (int i = 1; i < n; i++){
-        if (dp[i].f > mxn){
-            mxn = dp[i].f;
-            pos = i;
+    vector<ll> v(n);
+    
+    map<ll, int> hm;
+    int ans = -INF;
+    ll val;
+
+    for (int i = 0; i < n; i++){
+        cin >> v[i];
+        ll curr = v[i];
+        ll prev = v[i] - 1;
+        hm[curr] = hm[prev] + 1;
+        if (hm[curr] > ans){
+            ans = hm[curr];
+            val=curr;
         }
     }
-    cout << mxn << endl;
-    exit(0);
 
+    cout << ans << endl;
+    vector<int> ind;
+
+    for (int i = n-1; i >= 0;i--){
+        if (ans==0) break;
+        if (v[i] == val){
+            ind.pb(i);
+            ans--;
+            val--;
+        } 
+    }
+    for (int i = ind.size() -1; i >= 0;i--){
+        cout << ind[i]+1 << " ";
+    }
+    cout <<endl;
+
+    exit(0);
 }
