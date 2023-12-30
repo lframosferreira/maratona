@@ -15,24 +15,33 @@ typedef pair<int , int> pii;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
-const int MAX = 1e6;
+
+const int MAX = 1e6+10;
+int fat[MAX];
 
 int main(){ _
-    ll n;
-    ll ans = 1;
-    int c = 1;
-    vector<ll> v(MAX+1);
-    v[1] = 1;
-    for (int i = 2; i <= MAX; i++) {
-        ll aux = v[i-1] * i;
-        while (aux % 10 == 0){
-            aux/=10;
-        }
-        v[i] = aux % 10;
+    fat[0] = 1;
+    fat[1] = 1;
+    fat[2] = 2;
+    fat[3] = 6;
+    fat[4] = 4;
+    fat[5] = 2;
+    fat[6] = 2;
+    fat[7] = 4;
+    fat[8] = 2;
+    fat[9] = 8;
+    for (int i = 10; i < MAX; i++) {
+        int k = i % 100;
+        k = k / 10;
+        if (k%2 ==0) fat[i] = 6 * fat[i/5] * fat[i%10] % 10;
+        else fat[i] = 4 * fat[i/5] * fat[i%10] % 10;
     }
+    int n;
+    int c = 1;
+    int ans;
     while (cin >> n){
         cout << "Instancia " << c << endl;
-        ans = v[n];
+        ans = fat[n];
         cout << ans << endl;
         c++;
     }

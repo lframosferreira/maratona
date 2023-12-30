@@ -18,11 +18,11 @@ typedef pair<int , int> pii;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const ll MAX = 1e5 + 10;
 
 int main(){ _
     ll n;int  m; cin >> n >> m;        
     vector<pair<ll, ll>> nodes(m+2);
+    vector<vector<pair<ll ,ll>> g(m+2);
     ll sx, sy, fx, fy; cin >> sx >> sy >> fx >> fy;
     nodes[0] = {sx, sy};
     nodes[m+1] = {fx, fy};
@@ -31,6 +31,7 @@ int main(){ _
         cin >> a >> b;
         nodes[i] = {a, b};
     }
+    sort(nodes.begin(), nodes.end());
     priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll ,int>>> pq;
     vector<ll> dists(m+2, LINF);
     vector<bool> vis(m+2, false);
