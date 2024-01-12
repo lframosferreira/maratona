@@ -19,6 +19,7 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 vector<int> id, sz, xp;
+
 int find(int p){
     return id[p] = (id[p] == p ? p : find(id[p]));
 }
