@@ -19,8 +19,10 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    int m, n, k; cin >> m >> n >> k;
-    vector<vector<int>> g(m, vector<int>(n, 0));
-
+    int n, m, q; cin >> n >> m >> q;    
+    int x1, y1, x2, y2;
+    while (q--){
+        cin >> x1 >> y1 >> x2 >> y2;
+    }
     exit(0);
 }
