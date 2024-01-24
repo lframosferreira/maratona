@@ -20,6 +20,10 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int t; cin >> t;
+    while (t--){
+        int n, m; cin >> n >> m;
+
+    }
     exit(0);
 }

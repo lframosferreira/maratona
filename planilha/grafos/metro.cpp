@@ -22,23 +22,28 @@ const int MAX = 2e4 + 10;
 vector<int> g[MAX];
 int dgs[MAX];
 int vis[MAX];
-int u, ans, extra;
 
-void dfs(int y, int dist){
-    if (vis[y]){
-        ans = max(ans, dist); 
-        return;
-    }
-    vis[y] = true;
-    for (auto v: g[y]){
-        dfs(v, dist=1);
-    }
+int ans;
+int c, start;
+
+int dfs1(int u){
+    if (vis[u]) return -1;
+    vis[u] = true;
+    if (dgs[u] > 2 and u!= c) return u;    
+    for (auto v: g[u]) return dfs1(v);
+}
+
+void dfs2(int u, int dist){
+    if (u==c) return;
+    if (u==start) ans=max(ans, dist);
+    if (vis[u]) return;
+    vis[u] = true;
+    for (auto v: g[u]) if (v!=c) dfs2(v, dist+1);
 }
 
 int main(){ _
     memset(dgs, 0, sizeof dgs);
     memset(vis, 0, sizeof vis);
-    u = -1;
     ans = -INF;
     int N, M; cin >> N >> M;
     while (M--){
@@ -48,26 +53,15 @@ int main(){ _
         dgs[P]++;
         dgs[Q]++;
     }
-    for (int i = 1; i <= N; i++){
-        if (dgs[i] == 1){
-            u = i;
-            break;
+    c = -1;
+    for (int i = 1; i <= N; i++) {
+        if (dgs[i] >= 5){
+            c = i;
         }
     }
-    if (u == -1){
-        for (int i = 1; i <= N; i++){
-            if (dgs[i] == 3){
-                u = i;
-                break;
-            }
-        }
-    }
-    extra = 0;
-    while (dgs[u] < 3){
-        extra++;
-        u = g[u][0];
-    }
-    dfs(u, 0);
+    start = dfs1(c);
+    memset(vis, 0, sizeof vis);
+    dfs2(start, 0);
     cout << ans << endl;
     exit(0);
 }
