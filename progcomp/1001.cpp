@@ -22,6 +22,8 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int A, B; cin >> A >> B;
+    int X = A + B;
+    cout << "X = " << X << endl;
     exit(0);
 }
