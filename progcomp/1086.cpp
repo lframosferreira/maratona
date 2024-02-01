@@ -31,79 +31,90 @@ int main(){ _
         vector<int> v(K);
         for (int& i: v) cin >> i;
         for (int& i: v) i *= 100;
-        int ans1 = 0;
-        int ans2 = 0;
+        int ans1 = -1;
+        int ans2 = -1;
         sort(v.begin(), v.end(), greater<int>());
         int l = 0; int r = K-1;
         int cover1 = 0;
         int cover2 = 0;
-        while (l < r) {
-            if (v[l] > N){
-                l++;
-                continue;
-            }
-            if (v[l] == N) {
-                ans1++;
-                l++;
-                cover1++;
-                continue;
-            }
-            int want = N - v[l];
-            int found = 0;
-            while (v[r] > want){
-                r--;
-                if (r <= l) break;
-                if (v[r] == want){
-                    found = 1;
-                    break;
-                }
-            }
-            if (r <= l) break;
-            if (!found) {
-                l++;
-                continue;
-            }
-            ans1+=2;
-            cover1++;
-            l++;
-            r--;
+        if (M % L != 0 and N % L != 0){
+            cout << "impossivel" << endl;
+            continue;
         }
-        if (cover1 < M/L) ans1 = -1;
+        if (M % L == 0){ 
+            ans1 = 0;
+            while (l <= r) {
+                if (cover1 == M / L) break;
+                if (v[l] > N){
+                    l++;
+                    continue;
+                }
+                if (v[l] == N) {
+                    ans1++;
+                    l++;
+                    cover1++;
+                    continue;
+                }
+                int want = N - v[l];
+                int found = 0;
+                while (v[r] <= want){
+                    if (r <= l) break;
+                    if (v[r] == want){
+                        found = 1;
+                        break;
+                    }
+                    r--;
+                }
+                if (r < l) break;
+                if (!found) {
+                    l++;
+                    continue;
+                }
+                ans1+=2;
+                cover1++;
+                l++;
+                r--;
+            }
+            if (cover1 < M/L) ans1 = -1;
+        }
 
         l = 0; r = K-1;
-        while (l < r) {
-            if (v[l] > M){
-                l++;
-                continue;
-            }
-            if (v[l] == M) {
-                ans2++;
-                l++;
-                cover2++;
-                continue;
-            }
-            int want = M - v[l];
-            int found = 0;
-            while (v[r] > want){
-                r--;
-                if (r <= l) break;
-                if (v[r] == want){
-                    found = 1;
-                    break;
+        if (N % L == 0){
+            ans2 = 0;
+            while (l <= r) {
+                if (cover2 == N / L) break;
+                if (v[l] > M){
+                    l++;
+                    continue;
                 }
-            }
-            if (r <= l) break;
-            if (!found) {
+                if (v[l] == M) {
+                    ans2++;
+                    l++;
+                    cover2++;
+                    continue;
+                }
+                int want = M - v[l];
+                int found = 0;
+                while (v[r] <= want){
+                    if (r <= l) break;
+                    if (v[r] == want){
+                        found = 1;
+                        break;
+                    }
+                    r--;
+                }
+                if (r < l) break;
+                if (!found) {
+                    l++;
+                    continue;
+                }
+                ans2+=2;
+                cover2++;
                 l++;
-                continue;
+                r--;
             }
-            ans2+=2;
-            cover2++;
-            l++;
-            r--;
+            if (cover2 < N/L) ans2 = -1;
         }
-        if (cover2 < N/L) ans2 = -1;
-
         if (ans1 == -1 and ans2 == -1) cout << "impossivel" << endl;
         else if (ans1 == -1) cout << ans2 << endl;
         else if (ans2 == -1) cout << ans1 << endl;
