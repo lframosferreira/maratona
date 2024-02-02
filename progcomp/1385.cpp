@@ -29,27 +29,37 @@ int main(){ _
         string line; cin >> line;
         // header
         int i = 1;
+        int vend=0;
         while (isdigit(line[i])){
             cout << line.substr(i-1, 2) << " ";
             i+=2;
+            vend++;
         }
         cout << line.substr(i-1, string::npos) << endl;;
         while (1){
             cin >> line;
             if (line[0] == 'T' and line[1] == 'P'){
                 cout << "TP ";
-                // cut sum cols
+                // cout sum cols
                 break;
             }
             i = 0;
             while (!isdigit(line[i])) i++;
             cout << line.substr(0, i) << " ";
-            
-
-
-            cout << endl;
+            string nums = line.substr(i, string::npos);
+            vector<int> n(vend+1);
+            while (1){
+                int prev = 0;
+                for (int s = 1; s < vend+1; s++){
+                    for (int m = 1; m < 4; m++){
+                        n[s] = stoi(nums.substr(prev, m));
+                        prev = m;
+                    }
+                }
+                if (accumulate(n.begin()+1, n.begin()+vend, 0) == n[vend]) break;
+            }
+            cout << n[1] << " " << n[2] << " " << n[3] << " " << n[4] << endl;
         } 
-
     }
     exit(0);
 }

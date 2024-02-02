@@ -21,17 +21,15 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-bool oob(int x, int y, int N, int M){
-    return x < 0 or x >= N or y < 0 or y >= M;
-}
-
 int main(){ _
-    while (1){
-        int N, M; cin >> N >> M;
-        if (N == 0 and M == 0) break;
-        vvi v(N, vi(M));
-        for (int i = 
-
-    } 
+    int N;
+    while (cin >> N){
+        vi entrada(N);
+        for (int& i: entrada) cin >> i;
+        cin >> M;
+        vi saida(M);
+        for (int& i: saida) cin >> i;
+        
+    }
     exit(0);
 }

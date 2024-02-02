@@ -21,17 +21,10 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-bool oob(int x, int y, int N, int M){
-    return x < 0 or x >= N or y < 0 or y >= M;
-}
-
 int main(){ _
-    while (1){
-        int N, M; cin >> N >> M;
-        if (N == 0 and M == 0) break;
-        vvi v(N, vi(M));
-        for (int i = 
-
-    } 
+    set<string> S;
+    string joia;
+    while (cin >> joia) S.insert(joia);
+    cout << S.size() << endl;
     exit(0);
 }
