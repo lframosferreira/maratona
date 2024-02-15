@@ -21,18 +21,37 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int main(){ _
-    int S; T; cin >> S >> T;
-    vector<vector<pii>> g(S+1);
-    while (T--){
-        int A, B, C; cin >> A >> B >> C;
-        g[A].pb({B, C});
-        g[B].pb({A, C});
-    }
-    int Q; cin >> Q;
-    while (Q--){
-        int X, M; cin >> X >> M;
+const int MAX = 1e4 + 10;
+int vis[MAX];
+vector<int> inits;
 
+void dfs(int u, vector<vector<pii>> &g, int parent){
+    vis[u]=1;
+    for (auto [v, w]: g[u]){ 
+        if (!vis[v]) dfs(v, g, u);
+        else if (vis[v] and v != parent) inits.pb(v);
+    }
+}
+
+int main(){ _
+    int S, T; 
+    while (cin >> S >> T){
+        vector<vector<pii>> g(S+1);
+        while (T--){
+            int A, B, C; cin >> A >> B >> C;
+            g[A].pb({B, C});
+            g[B].pb({A, C});
+        }
+        int Q; cin >> Q;
+        while (Q--){
+            memset(vis, 0, sizeof vis);
+            inits.clear();
+            int X, M; cin >> X >> M;
+            dfs(X, g, X);
+            cout << X << endl;
+            for (int& i: inits) cout << i << " ";
+            cout << endl;
+        }
     }
     exit(0);
 }
