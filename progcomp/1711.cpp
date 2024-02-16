@@ -23,10 +23,13 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e4 + 10;
 int vis[MAX];
+int par[MAX];
 vector<int> inits;
 
 void dfs(int u, vector<vector<pii>> &g, int parent){
+    if (vis[u]) return;
     vis[u]=1;
+    par[u]=parent;
     for (auto [v, w]: g[u]){ 
         if (!vis[v]) dfs(v, g, u);
         else if (vis[v] and v != parent) inits.pb(v);
@@ -45,6 +48,7 @@ int main(){ _
         int Q; cin >> Q;
         while (Q--){
             memset(vis, 0, sizeof vis);
+            memset(par, 0, sizeof par);
             inits.clear();
             int X, M; cin >> X >> M;
             dfs(X, g, X);
