@@ -27,12 +27,14 @@ int par[MAX];
 vector<int> inits;
 
 void dfs(int u, vector<vector<pii>> &g, int parent){
-    if (vis[u]) return;
+    if (vis[u]){
+        inits.pb(u);
+        return;
+    }
     vis[u]=1;
     par[u]=parent;
     for (auto [v, w]: g[u]){ 
         if (!vis[v]) dfs(v, g, u);
-        else if (vis[v] and v != parent) inits.pb(v);
     }
 }
 
