@@ -21,20 +21,11 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+int x[6], y[6];
+
 int main(){ _
     while (true){
-        int N, M, A; cin >> N >> M >> A; 
-        if (N == M == A == 0) break;
-        vector<vector<pii>> g(N+1);
-        while (M--){
-            int O, D, S;
-            cin >> O >> D >> S;
-            g[O].pb({D, S});
-            g[D].pb({O, S});
-        }
-
         
-    }
-    cout << endl;
+    }   
     exit(0);
 }
