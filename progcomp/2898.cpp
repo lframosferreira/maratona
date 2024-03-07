@@ -32,7 +32,7 @@ int main(){ _
             g[O].pb({D, S});
             g[D].pb({O, S});
         }
-
+        
         
     }
     cout << endl;
