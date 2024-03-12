@@ -23,6 +23,9 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    string num; cin >> num;
+    int r = 0;
+    for (auto c: num) r = (r + (c-'0'))%3;    
+    cout << r << endl;
     exit(0);
 }

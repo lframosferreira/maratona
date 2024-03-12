@@ -21,9 +21,22 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+void pv(vi v){for (int i: v) cout << i << " "; cout << endl;}
+
 int solve(vi &v, vi &w){
     if (v==w) return 1;
-    vi aux;
+    if (v.size()==w.size()) return 0;
+    int b=0;
+    for (int i = 1; i < v.size(); i++){
+        vi aux(v.begin()+i, v.end());
+        reverse(aux.begin(), aux.end());
+        for (int j = 0; j < i; j++){
+            aux[aux.size()-j-1]+=v[j];
+        }
+        vi rev(aux.rbegin(), aux.rend());
+        b = b || (solve(aux, w) || solve(rev, w));
+    }
+    return  b;
 }
 
 int main(){ _
@@ -34,8 +47,8 @@ int main(){ _
         cin >> M;
         vector<int> w(M);
         for (int &i : w) cin >> i;
-        
-
+        if (solve(v, w)) cout << "S" << endl;
+        else cout << "N" << endl;    
     }
     exit(0);
 }
