@@ -21,6 +21,11 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+int solve(vi &v, vi &w){
+    if (v==w) return 1;
+    vi aux;
+}
+
 int main(){ _
     int N, M;
     while (cin >> N){
@@ -29,6 +34,7 @@ int main(){ _
         cin >> M;
         vector<int> w(M);
         for (int &i : w) cin >> i;
+        
 
     }
     exit(0);

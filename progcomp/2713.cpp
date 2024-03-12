@@ -40,10 +40,8 @@ int main(){
 
 
         for (int i = 1; i <= N; i++){
-            for (int j = 0; j <= K; j++){
-                for (int q = 0; q <= j; q++){
-                    dp[i][j] = min(dp[i][j], dp[i-1][j-q] + monster_hp[i]/(V+q*dmg_increase[i]));
-                }
+            for (int j = 1; j <= K; j++){
+                dp[i][j] = min(dp[i-1][j] + monster_hp[i]/V, dp[i-1][j-1] + monster_hp[i]/(V+dmg_increase[i]));
             }
         }
         cout << dp[N][K] << endl;
