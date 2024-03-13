@@ -60,28 +60,26 @@ int main(){ _
             int X, M; cin >> X >> M;
             dfs(X, 0, X);
             int ans = INF;
+            memset(dists, INF, sizeof dists);
+            priority_queue<pii, vector<pii>, greater<pii>> pq;
+            pq.push({X, 0});
+            while (!pq.empty()){
+                auto [u, w] = pq.top();pq.pop();
+                if (w > dists[u]) continue;
+                dists[u]=w;
+                for (auto [v, w_v]: g[u]){
+                    pq.push({v, w_v+w});
+                } 
+            } 
             for (int i=1; i <= S; i++){
                 if (ciclos[i] >= M and ciclos[i] != INF){
                     if (i == X) ans = min(ans, ciclos[i]);
                     else {
-                        memset(vis, 0, sizeof vis);
-                        memset(dists, INF, sizeof dists);
-                        priority_queue<pii, vector<pii>, greater<pii>> pq;
-                        pq.push({i, 0});
-                        while (!pq.empty()){
-                            auto [u, w] = pq.top();pq.pop();
-                            if (vis[u]) continue;
-                            vis[u]=1;
-                            dists[u]=w;
-                            for (auto [v, w_v]: g[u]){
-                                pq.push({v, w_v+w});
-                            } 
-                        } 
                         ans=min(ans, 2*dists[i]+ciclos[i]);
                     }
                 }
             } 
-            cout << ans << endl;
+            cout << (ans==INF ? -1 : ans) << endl;
         }
     }
     exit(0);
