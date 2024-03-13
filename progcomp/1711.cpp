@@ -22,41 +22,66 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e4 + 10;
-int vis[MAX];
-int par[MAX];
-vector<int> inits;
 
-void dfs(int u, vector<vector<pii>> &g, int parent){
-    if (vis[u]){
-        inits.pb(u);
-        return;
-    }
+int ciclos[MAX];
+vector<vector<pii>> g;
+int depth[MAX];
+int vis[MAX];
+int dists[MAX];
+
+void dfs(int u, int d, int prev){
     vis[u]=1;
-    par[u]=parent;
-    for (auto [v, w]: g[u]){ 
-        if (!vis[v]) dfs(v, g, u);
+    depth[u]=d;
+    for (auto [v, w] : g[u]) {
+        if (!vis[v]) dfs(v, d+w, u);
+        else {
+            if (v != prev) ciclos[v] = min(ciclos[v], d+w-depth[v]); 
+        }
     }
 }
+
 
 int main(){ _
     int S, T; 
     while (cin >> S >> T){
-        vector<vector<pii>> g(S+1);
+        g.clear();
+        g.resize(S+1);
         while (T--){
             int A, B, C; cin >> A >> B >> C;
             g[A].pb({B, C});
             g[B].pb({A, C});
         }
+        
         int Q; cin >> Q;
         while (Q--){
+            memset(depth, 0, sizeof depth);
             memset(vis, 0, sizeof vis);
-            memset(par, 0, sizeof par);
-            inits.clear();
+            memset(ciclos, INF, sizeof ciclos);
             int X, M; cin >> X >> M;
-            dfs(X, g, X);
-            cout << X << endl;
-            for (int& i: inits) cout << i << " ";
-            cout << endl;
+            dfs(X, 0, X);
+            int ans = INF;
+            for (int i=1; i <= S; i++){
+                if (ciclos[i] >= M and ciclos[i] != INF){
+                    if (i == X) ans = min(ans, ciclos[i]);
+                    else {
+                        memset(vis, 0, sizeof vis);
+                        memset(dists, INF, sizeof dists);
+                        priority_queue<pii, vector<pii>, greater<pii>> pq;
+                        pq.push({i, 0});
+                        while (!pq.empty()){
+                            auto [u, w] = pq.top();pq.pop();
+                            if (vis[u]) continue;
+                            vis[u]=1;
+                            dists[u]=w;
+                            for (auto [v, w_v]: g[u]){
+                                pq.push({v, w_v+w});
+                            } 
+                        } 
+                        ans=min(ans, 2*dists[i]+ciclos[i]);
+                    }
+                }
+            } 
+            cout << ans << endl;
         }
     }
     exit(0);
