@@ -23,10 +23,65 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 2e5 + 10;
-vector<int> g[MAX];
+
+int id[MAX], sz[MAX];
+
+struct Edge{
+    int u;
+    int v;
+    ll w;
+
+    bool operator < (const Edge &other){
+        return w < other.w;
+    }
+};
+
+int find(int u){
+    return id[u] = (id[u]==u ? u : find(id[u]));
+}
+
+void uni(int p, int q){
+    p=find(p);q=find(q);
+    if(p==q) return;
+    if (sz[p] > sz[q]){
+        int aux=p;
+        p=q;
+        q=aux;
+    }
+    id[p]=q;
+    sz[q]+=sz[p];
+}
 
 int main(){ _
     int n, m; cin >> n >> m;
-     
+    vector<ll> c(n+1);
+    memset(sz, 1, sizeof sz);
+    for (int i = 1; i <= n; i++) id[i]=i;
+    for (int i=1; i <= n; i++) cin >> c[i];
+    int idx = 1;
+    int mn = c[1];
+    for (int i = 2; i <= n; i++){
+        if (c[i] < mn){
+            mn=c[i];
+            idx=i;
+        }
+    }
+    vector<Edge> edges;
+    for (int i = 1; i <= n; i++){
+        if (i==idx) continue;
+        edges.pb({idx, i, c[i]+c[idx]});
+    }
+    while (m--){
+        int i, j; ll r; cin >> i >> j >> r;
+        edges.pb({i, j, r});
+    }
+    sort(edges.begin(), edges.end()); 
+    ll ans=0;
+    for (auto e : edges){
+        if (find(e.u)==find(e.v)) continue;
+        uni(e.u, e.v);
+        ans+=e.w;
+    }
+    cout << ans << endl;
     exit(0);
 }
