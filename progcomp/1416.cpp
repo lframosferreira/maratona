@@ -62,15 +62,22 @@ int main(){ _
 		}
 		get_standings();
 		
-		int l = 1, r=20; // tirei da bunda
-		
 		vector<pair<int, pii>> original_standings(standings);	
+        set<pii> tied;
+        for (int i = 0; i < T- 1; i++){
+            auto [id1, aux1] = original_standings[i];
+            auto [id2, aux2] = original_standings[i+1];
+            if (aux1==aux2) tied.insert({i, i+1});
+        }
+        
 		//for (auto [id, p]: original_standings){
 		//	if (id==0) continue;
 		//	auto [completed, penalty] = p;
 		//	cout << "id :" << id << "   " << completed << "," << penalty << endl; 
 		//}
 		//cout << "------------------------" << endl;
+
+		int l = 1, r=20; // tirei da bunda
 
 		// acha menor
 		int mn=EP;
@@ -85,14 +92,15 @@ int main(){ _
 					break;
 				}
 			}
+            if (eq){
+                for (pii p: tied){
+                    if (standings[p.f].s != standings[p.s].s){
+                        eq=false;
+                        break;
+                    }
+                }
+            }
 			if (eq){
-				cout << EP << endl;
-				for (auto [id, p]: standings){
-					if (id==0) continue;
-					auto [completed, penalty] = p;
-					cout << "id :" << id << "   " << completed << "," << penalty << endl; 
-				}
-				cout << "------------------------" << endl;
 				r=m;	
 				mn=min(mn, EP);
 			}else {
@@ -100,7 +108,7 @@ int main(){ _
 			}
 		}
 
-		l=20;r=510;
+		l=20;r=1e5 + 10;
 		// acha maior
 		EP=20;
 		int mx=EP;
@@ -115,6 +123,14 @@ int main(){ _
 					break;
 				}
 			}
+            if (eq){
+                for (pii p: tied){
+                    if (standings[p.f].s != standings[p.s].s){
+                        eq=false;
+                        break;
+                    }
+                }
+            }
 			if (eq){
 				l=m+1;
 				mx=max(mx, EP);
@@ -123,7 +139,7 @@ int main(){ _
 			}
 		}
 		cout << mn << " ";
-	   	if (mx > 500) cout << '*' << endl;
+	   	if (mx > (int)1e5) cout << '*' << endl;
 		else cout << mx	<< endl;
 	}
     exit(0);
