@@ -34,7 +34,8 @@ void get_standings(){
 	for (int i = 1; i <= T; i++) standings[i]={i, {0, 0}};
 	for (int i = 1; i <= T; i++){
 		for (int j = 1; j<= P; j++){
-			standings[i].s.f += v[i][j].s > 0 ? 1 : 0;
+			if (v[i][j].s == 0) continue;
+			standings[i].s.f += 1;
 			standings[i].s.s += v[i][j].s + EP * v[i][j].f;
 		}	
 	}
@@ -72,27 +73,37 @@ int main(){ _
 		//cout << "------------------------" << endl;
 
 		// acha menor
-		while (l<r){
-			int m=(l+r)/2;
-			EP=m;
-			get_standings();
-			bool eq=true;
-			for (int i = 1; i <= T; i++){
-				if (original_standings[i].f != standings[i].f){
-					eq=false;
-					break;
-				}
-			}
-			if (eq){
-				r=m;	
-			}else {
-				l=m+1;
-			}
-		}
 		int mn=EP;
+		while (l<r){
+			int m=(l+r)/2;
+			EP=m;
+			get_standings();
+			bool eq=true;
+			for (int i = 1; i <= T; i++){
+				if (original_standings[i].f != standings[i].f){
+					eq=false;
+					break;
+				}
+			}
+			if (eq){
+				cout << EP << endl;
+				for (auto [id, p]: standings){
+					if (id==0) continue;
+					auto [completed, penalty] = p;
+					cout << "id :" << id << "   " << completed << "," << penalty << endl; 
+				}
+				cout << "------------------------" << endl;
+				r=m;	
+				mn=min(mn, EP);
+			}else {
+				l=m+1;
+			}
+		}
 
-		l=21;r=310;
+		l=20;r=510;
 		// acha maior
+		EP=20;
+		int mx=EP;
 		while (l<r){
 			int m=(l+r)/2;
 			EP=m;
@@ -106,13 +117,13 @@ int main(){ _
 			}
 			if (eq){
 				l=m+1;
+				mx=max(mx, EP);
 			}else {
 				r=m;	
 			}
 		}
-		int mx=EP;
 		cout << mn << " ";
-	   	if (mx > 300) cout << '*' << endl;
+	   	if (mx > 500) cout << '*' << endl;
 		else cout << mx	<< endl;
 	}
     exit(0);
