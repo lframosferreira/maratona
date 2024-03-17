@@ -38,11 +38,15 @@ void get_standings(){
 			standings[i].s.f += 1;
 			standings[i].s.s += v[i][j].s + EP * v[i][j].f;
 		}	
-	}
-	sort(standings.begin(), standings.end(), [](pair<int, pii> a, pair<int, pii> b){
-			if (a.s.f==b.s.f) return a.s.s < b.s.s;	
-			return a.s.f > b.s.f;
-			});
+    }
+    sort(standings.begin(), standings.end(), [](pair<int, pii> a, pair<int, pii> b){
+        if (a.s.f==b.s.f) {
+            if(a.s.s==b.s.s) return a.f < b.f;
+            else return a.s.s < b.s.s;	
+        }
+
+        return a.s.f > b.s.f;
+    });
 }
 
 int main(){ _
@@ -64,7 +68,7 @@ int main(){ _
 		
 		vector<pair<int, pii>> original_standings(standings);	
         set<pii> tied;
-        for (int i = 0; i < T- 1; i++){
+        for (int i = 0; i < T - 1; i++){
             auto [id1, aux1] = original_standings[i];
             auto [id2, aux2] = original_standings[i+1];
             if (aux1==aux2) tied.insert({i, i+1});
