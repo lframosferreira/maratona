@@ -24,29 +24,48 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int T, P;
 pii v[110][20];
-vector<pair<int, pii>> standings;
+
+struct Team{
+    int id;
+    int q_ans;
+    int penalty;
+
+    bool operator < (const Team &other){
+        if (q_ans==other.q_ans){
+            if (penalty==other.penalty) return id < other.id;
+            else return penalty < other.penalty;
+        }
+        return q_ans > other.q_ans;
+    };
+
+    bool operator == (const Team &other){
+        return q_ans==other.q_ans and penalty==other.penalty;           
+    };
+
+    bool operator != (const Team &other){
+        return q_ans!=other.q_ans or penalty!=other.penalty;           
+    };
+};
+
+void pt(const Team &t){
+    cout << "id=" << t.id << " , q_ans=" << t.q_ans << " , penalty=" << t.penalty << endl;
+}
 
 int EP;
+vector<Team> standings;
 
 void get_standings(){
 	standings.clear();
-	standings.resize(T+1);
-	for (int i = 1; i <= T; i++) standings[i]={i, {0, 0}};
 	for (int i = 1; i <= T; i++){
+        int q_ans=0, penalty=0;
 		for (int j = 1; j<= P; j++){
-			if (v[i][j].s == 0) continue;
-			standings[i].s.f += 1;
-			standings[i].s.s += v[i][j].s + EP * v[i][j].f;
+			if (v[i][j].s == -1) continue;
+			q_ans += 1;
+		    penalty += v[i][j].s + EP * v[i][j].f;
 		}	
+        standings.pb({i, q_ans, penalty});
     }
-    sort(standings.begin(), standings.end(), [](pair<int, pii> a, pair<int, pii> b){
-        if (a.s.f==b.s.f) {
-            if(a.s.s==b.s.s) return a.f < b.f;
-            else return a.s.s < b.s.s;	
-        }
-
-        return a.s.f > b.s.f;
-    });
+    sort(standings.begin(), standings.end());
 }
 
 int main(){ _
@@ -61,26 +80,18 @@ int main(){ _
 				cin >> prob;
 				v[i][j].f = stoi(prob.substr(0, prob.find('/')));
 				string aux =  prob.substr(prob.find('/')+1, string::npos);	
-				v[i][j].s = aux == "-" ? 0 : stoi(aux);
+				v[i][j].s = aux == "-" ? -1 : stoi(aux);
 			}
 		}
 		get_standings();
-		
-		vector<pair<int, pii>> original_standings(standings);	
-        set<pii> tied;
+		vector<Team> original_standings(standings);	
+        set<pii> original_tied;
         for (int i = 0; i < T - 1; i++){
-            auto [id1, aux1] = original_standings[i];
-            auto [id2, aux2] = original_standings[i+1];
-            if (aux1==aux2) tied.insert({i, i+1});
+            auto aux1 = original_standings[i];
+            auto aux2 = original_standings[i+1];
+            if (aux1==aux2) original_tied.insert({i, i+1});
         }
         
-		//for (auto [id, p]: original_standings){
-		//	if (id==0) continue;
-		//	auto [completed, penalty] = p;
-		//	cout << "id :" << id << "   " << completed << "," << penalty << endl; 
-		//}
-		//cout << "------------------------" << endl;
-
 		int l = 1, r=20; // tirei da bunda
 
 		// acha menor
@@ -89,16 +100,30 @@ int main(){ _
 			int m=(l+r)/2;
 			EP=m;
 			get_standings();
+            set<pii> tied;
+            for (int i = 0; i < T - 1; i++){
+                auto aux1 = standings[i];
+                auto aux2 = standings[i+1];
+                if (aux1==aux2) tied.insert({i, i+1});
+            }
 			bool eq=true;
-			for (int i = 1; i <= T; i++){
-				if (original_standings[i].f != standings[i].f){
+			for (int i = 0; i < T; i++){
+				if (original_standings[i].id != standings[i].id){
 					eq=false;
 					break;
 				}
 			}
             if (eq){
+                for (pii p: original_tied){
+                    if (standings[p.f] != standings[p.s]){
+                        eq=false;
+                        break;
+                    }
+                }
+            }
+            if (eq){
                 for (pii p: tied){
-                    if (standings[p.f].s != standings[p.s].s){
+                    if (original_tied.find(p) == original_tied.end()){
                         eq=false;
                         break;
                     }
@@ -113,6 +138,8 @@ int main(){ _
 		}
 
 		l=20;r=1e5 + 10;
+
+
 		// acha maior
 		EP=20;
 		int mx=EP;
@@ -120,24 +147,38 @@ int main(){ _
 			int m=(l+r)/2;
 			EP=m;
 			get_standings();
+            set<pii> tied;
+            for (int i = 0; i < T - 1; i++){
+                auto aux1 = standings[i];
+                auto aux2 = standings[i+1];
+                if (aux1==aux2) tied.insert({i, i+1});
+            }
 			bool eq=true;
-			for (int i = 1; i <= T; i++){
-				if (original_standings[i].f != standings[i].f){
+			for (int i = 0; i < T; i++){
+				if (original_standings[i].id != standings[i].id){
 					eq=false;
 					break;
 				}
 			}
             if (eq){
+                for (pii p: original_tied){
+                    if (standings[p.f] != standings[p.s]){
+                        eq=false;
+                        break;
+                    }
+                }
+            }
+            if (eq){
                 for (pii p: tied){
-                    if (standings[p.f].s != standings[p.s].s){
+                    if (original_tied.find(p) == original_tied.end()){
                         eq=false;
                         break;
                     }
                 }
             }
 			if (eq){
-				l=m+1;
 				mx=max(mx, EP);
+				l=m+1;
 			}else {
 				r=m;	
 			}
