@@ -17,13 +17,12 @@ typedef long long ll;
 typedef pair<int , int> pii;
 typedef pair<ll, ll> pll;
 typedef vector<int> vi;
-typedef vvi vector<vi>
 typedef vector<ll> vll;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    cout << "Hello World!" << endl;    
     exit(0);
 }
