@@ -45,7 +45,6 @@ int main(){ _
             pnts[0]+=g[0][i];
             g[i][0]=0;
         }
-        bool can=true;
         for (int i = 1;i < N; i++){
             int maybe=pnts[i];
             for (int j = 1;j < N;j++){
