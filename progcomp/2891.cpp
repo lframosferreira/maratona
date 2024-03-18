@@ -45,32 +45,36 @@ int orient(Point a, Point b, Point c){
 }
 
 bool cmp(Point a, Point b, Point c){
-    a = a-b;b=b-c;
-    if (cross(a, b)==0){
-        int d1=a.x*a.x+a.y*a.y;
-        int d2 = b.x*b.x + b.y*b.y;
+    auto p1=b-a;
+    auto p2=c-a;
+    if (cross(p1, p2)==0){
+        int d1=p1.x*p1.x+p1.y*p1.y;
+        int d2 = p2.x*p2.x + p2.y*p2.y;
         return d1 < d2;
     }
-    return cross(a,b) > 0;
+    return cross(p1,p2) > 0;
 }
 
 //copied from https://victorlecomte.com/cp-geo.pdf
 bool is_convex(vector<Point> &p) {
     bool turn_right=false;
+    bool turn_left=false;
     int n = p.size();
     for (int i=0; i<n; i++) {
         int o = orient(p[i], p[(i+1)%n], p[(i+2)%n]);
         if (o < 0) turn_right = true;
+        if (o > 0) turn_left = true;
     }
-    return !turn_right;
+    return !(turn_right and turn_left);
 }
 
-int areaPolygon(vector<Point> &p) {
+int area(const vector<Point> &p) {
     int area = 0;
-    for (int i = 0, n = p.size(); i < n; i++) {
+    int n = p.size();
+    for (int i = 0; i < n; i++) {
         area += cross(p[i], p[(i+1)%n]);
     }
-    return area;
+    return abs(area) / 2;
 }
 
 int main(){ _
@@ -91,7 +95,7 @@ int main(){ _
             vector<Point> aux = pts;
             aux.erase(aux.begin()+i);
             if(!is_convex(aux)) continue;
-            ans=max(ans, areaPolygon(aux)/2);
+            ans=max(ans, area(aux));
         }
         cout << ans << endl;
     } 
