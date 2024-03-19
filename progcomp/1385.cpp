@@ -25,41 +25,61 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int main(){ _
     int C; cin >> C;
     while (C--){
-        vvi vals(4);
+        vvi vals(7, vi(7));
         string line; cin >> line;
-        // header
-        int i = 1;
-        int vend=0;
-        while (isdigit(line[i])){
-            cout << line.substr(i-1, 2) << " ";
-            i+=2;
-            vend++;
-        }
-        cout << line.substr(i-1, string::npos) << endl;;
-        while (1){
-            cin >> line;
-            if (line[0] == 'T' and line[1] == 'P'){
-                cout << "TP ";
-                // cout sum cols
+        int j = 1;
+        while (isdigit(line[j])) j+=2;
+        int n=line[j-2]-'0';
+        
+        vector<string> names(n+1);
+        vector<string> nums(n+1);
+        string tp;
+        int ppl=0;
+        while (cin >> line){
+            if (line.substr(0, 2) == "TP"){
+                tp=line.substr(2, string::npos);
                 break;
             }
-            i = 0;
-            while (!isdigit(line[i])) i++;
-            cout << line.substr(0, i) << " ";
-            string nums = line.substr(i, string::npos);
-            vector<int> n(vend+1);
-            while (1){
-                int prev = 0;
-                for (int s = 1; s < vend+1; s++){
-                    for (int m = 1; m < 4; m++){
-                        n[s] = stoi(nums.substr(prev, m));
-                        prev = m;
+            int idx=0;
+            ppl++;
+            while (!isdigit(line[idx])) idx++;
+            names[ppl] = line.substr(0, idx);
+            nums[ppl]=line.substr(idx, string::npos);
+        }
+        
+        for (int i =1; i <= n; i++) { 
+            for (int l = 1; l < nums[i].length()-3; l++){
+                for (int m = l+1; m < nums[i].length()-2; m++){
+                    for (int r = m+1; r < nums[i].length()-1; r++){
+                        int n1, n2, n3, t;
+                        n1=stoi(nums[i].substr(0, l));
+                        n2=stoi(nums[i].substr(l, m-l));
+                        n3=stoi(nums[i].substr(m, r-m));
+                        t=stoi(nums[i].substr(r, string::npos));
+                        if (n1+n2+n3==t){
+                            vals[i][1]=n1;
+                            vals[i][2]=n1;
+                            vals[i][3]=n1;
+                            vals[i][4]=n1;
+                        }
                     }
                 }
-                if (accumulate(n.begin()+1, n.begin()+vend, 0) == n[vend]) break;
             }
-            cout << n[1] << " " << n[2] << " " << n[3] << " " << n[4] << endl;
+        }
+        for (int i = 1; i <= ppl; i++){
+           for (int k = 1; k <= n+1; k++){
+                cout << nums[i][k] << " ";
+            } 
+            cout << endl;
         } 
+
+        // printando solução
+        // for (int i = 1; i <= n; i++) cout << "P" << i << " ";
+        // cout << "Totals" << endl;
+
+
     }
+
+
     exit(0);
 }
