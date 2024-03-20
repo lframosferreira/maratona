@@ -1,4 +1,8 @@
 // pescoço pra baixo é canela
+//
+//
+//
+// ENVIAR PRA TER ERRO
 
 #include <bits/stdc++.h>
 
@@ -50,29 +54,26 @@ int main(){
         vector<Category> categorias(M+1);
         for (int i = 1; i <= M; i++){
             int all_v=0;
-            for (int j: g[i+N+1]) all_v+=costs[j];
+            for (int j: g[i+N]) all_v+=costs[j];
             categorias[i] = {beneficios[i], all_v};
         }
         int ans = 0;
         vector<bool> vodkas_compradas(N+1);
+        vector<bool> categorias_cobertas(M+1);
         while (1){
             bool achei=false;
             for (int i = 1; i <= M; i++){
-                cout << "categorias[i]" << endl;
+                if (categorias_cobertas[i]) continue;
                 auto c = categorias[i];
                 if (c.b - c.all_v > 0){
                     achei=true;
+                    categorias_cobertas[i]=true;
                     ans += c.b - c.all_v;
-                    cout << "g[i+N]" << endl;
                     for (int vodka: g[i+N]){
                         if (!vodkas_compradas[vodka]){
                             vodkas_compradas[vodka]=1;
-                            cout << "g[vodka]" << endl;
                             for (int cat: g[vodka]){
-                                cout << "hihi" << endl;
-                                cout << cat << endl;
-                                categorias[cat].all_v-=costs[vodka];
-                                cout << "dps" << endl;
+                                categorias[cat-N].all_v-=costs[vodka];
                             }
                         }
                     }
