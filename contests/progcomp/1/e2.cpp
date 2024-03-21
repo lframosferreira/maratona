@@ -22,7 +22,7 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 2e5 + 10;
+const int MAX = 2e6 + 10;
 
 int id[MAX], sz[MAX];
 
@@ -55,11 +55,13 @@ void uni(int p, int q){
 int main(){ _
     int n, m; cin >> n >> m;
     vector<ll> c(n+1);
-    memset(sz, 1, sizeof sz);
-    for (int i = 1; i <= n; i++) id[i]=i;
+    for (int i = 1; i <= n; i++){
+        id[i]=i;
+        sz[i]=1;
+    }
     for (int i=1; i <= n; i++) cin >> c[i];
-    int idx = 1;
     int mn = c[1];
+    int idx=1;
     for (int i = 2; i <= n; i++){
         if (c[i] < mn){
             mn=c[i];
@@ -69,7 +71,7 @@ int main(){ _
     vector<Edge> edges;
     for (int i = 1; i <= n; i++){
         if (i==idx) continue;
-        edges.pb({idx, i, c[i]+c[idx]});
+        edges.pb({i, idx, c[i]+c[idx]});
     }
     while (m--){
         int i, j; ll r; cin >> i >> j >> r;
