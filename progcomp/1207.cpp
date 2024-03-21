@@ -29,7 +29,7 @@ struct Category{
     int all_v;
 
     bool operator < (const Category &other) const{
-        return b-all_v < other.b - other.all_v;
+        return (b-all_v) < (other.b - other.all_v);
     }
 };
 
@@ -58,20 +58,20 @@ int main(){
             categorias[i] = {beneficios[i], all_v};
         }
         int ans = 0;
-        vector<bool> vodkas_compradas(N+1);
-        vector<bool> categorias_cobertas(M+1);
+        vector<bool> vodkas_compradas(N+1, false);
+        vector<bool> categorias_cobertas(M+1, false);
         while (1){
             bool achei=false;
             for (int i = 1; i <= M; i++){
                 if (categorias_cobertas[i]) continue;
                 auto c = categorias[i];
-                if (c.b - c.all_v > 0){
+                if (c.b - c.all_v >= 0){
                     achei=true;
                     categorias_cobertas[i]=true;
                     ans += c.b - c.all_v;
                     for (int vodka: g[i+N]){
                         if (!vodkas_compradas[vodka]){
-                            vodkas_compradas[vodka]=1;
+                            vodkas_compradas[vodka]=true;
                             for (int cat: g[vodka]){
                                 categorias[cat-N].all_v-=costs[vodka];
                             }
