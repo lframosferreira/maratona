@@ -24,9 +24,11 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const ll MOD = 1e6;
-const ll MAX = 1e9+10; // nao é, arrumar dps
+const ll MAX = 1e6+10; // nao é, arrumar dps
+// ACHEI SOLUCAO MAS TA BUGADA, ENVIA RCOM RUNTIME ERROR DE DIVI POR ZERO
 
 ll fat[MAX];
+ll n5, n10;
 
 ll fexp(ll a, ll b){
     a %=MOD;
@@ -39,19 +41,23 @@ ll fexp(ll a, ll b){
     return res;
 }
 
+ll get_fat(ll a){
+    if (a >= MOD) return 0;
+    return fat[a];
+}
+
 int main(){ _
     ll N, K, L;
     fat[0]=fat[1]=1;
     for (int i = 2; i < MAX; i++) fat[i]=fat[i-1]*i%MOD;
     while (cin >> N >> K >> L){
-        ll n10=0;
-        ll n5;
+        n10=0;
         ll ans=0;
         while (n10*10 <= N){
             ll val10 = fexp(L, n10);  
             n5 = (N-n10*10)/5;
             ll val5=fexp(K, n5);
-            ll nperm = fat[n10+n5]/(fat[n10]*fat[n5]);
+            ll nperm = get_fat(n10+n5)/(get_fat(n10)*get_fat(n5));
             ans+=(nperm*val5%MOD*val10%MOD);
             n10++;
         }
