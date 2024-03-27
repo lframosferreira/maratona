@@ -51,15 +51,22 @@ int main(){ _
         int N; cin >> N;
         if (N==0) break;
 
-        vector<Point> v(N);
+        vector<Point> pts(N);
         for (int i = 0; i < N; i++){
             int x, y; cin >> x >> y;
-            v[i]={x, y};
+            pts[i]={x, y};
         }
         
-        sort(v.begin(), v.end(), [](Point u, Point v){
+        Point mn_pnt = *min_element(pts.begin(), pts.end());
+
+        sort(pts.begin(), pts.end(), [](Point u, Point v){
             return orient(mn_pnt, u, v);
         });
+        
+        for (auto pt: pts){
+            cout << pt.x << "," <<  pt.y << " ";
+            cout << endl;
+        }
 
         int cnt=0;
         if (cnt%2==1) cout << "Take this onion to the lab!" << endl;
