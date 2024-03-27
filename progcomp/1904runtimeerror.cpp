@@ -23,7 +23,7 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 2e7+10;
+const int MAX = 1e6+10;
 const ll MOD = 2;
 
 bool prime[MAX];
@@ -59,7 +59,7 @@ int main(){ _
     c[0]=1;c[1]=0;c[2]=1;
     for (int i = 3; i <= MAX-5; i++) c[i]=c[i-1]+__builtin_ctz(i & -i);
 
-    ll A, B; cin >> A >> B;
+    int A, B; cin >> A >> B;
     if (A == B){
         cout << "?" << endl;
     }else {
@@ -70,14 +70,10 @@ int main(){ _
             A=aux;
         }
         for (int i = A; i <= B; i++) if (prime[i]) cnt++;
-        if (cnt==0){
-            cout << "Bob" << endl;
-        } else {
-            ll n = cnt;
-            ll k = B-A;
-            if (c[n+k-1]-c[k]-c[n-1] >= 1) cout << "Bob" << endl;
-            else cout << "Alice" << endl;
-        }
+        ll n = cnt;
+        ll k = B-A;
+        if (c[n+k-1]-c[k]-c[n-1] >= 1) cout << "Bob" << endl;
+        else cout << "Alice" << endl;
     }
     exit(0);
 }
