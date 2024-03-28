@@ -27,13 +27,17 @@ struct Point {
     int x;
     int y;
 
-    Point operator - (const Point& other){
-        return {x-other.x, y-other.y};
+    Point operator - (const Point &other){
+        return Point{x-other.x, y-other.y};
     }
 
-    bool operator < (const Point& other){
+    bool operator < (const Point &other){
         if (y==other.y) return x<other.x;
         return y<other.y;
+    }
+
+    bool operator == (const Point &other){
+        return x==other.x and y==other.y;
     }
 };
 
@@ -43,6 +47,17 @@ int cross(Point u, Point v){
 
 int orient(Point a, Point b, Point c){
     return cross(b-a, c-a);
+}
+
+bool cmp(Point a, Point b, Point c){
+    auto p1=b-a;
+    auto p2=c-a;
+    if (cross(p1, p2)==0){
+        int d1=p1.x*p1.x+p1.y*p1.y;
+        int d2 = p2.x*p2.x + p2.y*p2.y;
+        return d1 < d2;
+    }
+    return cross(p1,p2) > 0;
 }
 
 int main(){ _
@@ -57,20 +72,58 @@ int main(){ _
             pts[i]={x, y};
         }
         
-        Point mn_pnt = *min_element(pts.begin(), pts.end());
+        auto it = min_element(pts.begin(), pts.end());
+        Point mn_pnt = *it;
 
-        sort(pts.begin(), pts.end(), [](Point u, Point v){
-            return orient(mn_pnt, u, v);
-        });
+        sort(pts.begin(), pts.end(), [&mn_pnt](Point u, Point v){
+            return cmp(mn_pnt, u, v);
+        }); // talvez ordenar dnv por hull interna, n tenho ctz
         
-        for (auto pt: pts){
-            cout << pt.x << "," <<  pt.y << " ";
+        
+        int cnt=0;
+        while (1){
+            for (auto pt: pts) cout << pt.x << "," << pt.y << " ";
             cout << endl;
+            vector<int> used_pts;
+            vector<int> used_pts_mask(pts.size());
+            used_pts.pb(0);
+            used_pts.pb(1);
+            used_pts_mask[0]=1;
+            used_pts_mask[1]=1;
+            int base=0;
+            int prev = 1;
+            int nxt = 2;
+            while (1){
+                if (orient(pts[base], pts[prev], pts[nxt%pts.size()]) >= 0){
+                    if (nxt!=pts.size()){
+                        used_pts.pb(nxt);
+                        used_pts_mask[nxt]=1;
+                    }
+                    base=prev;
+                    prev=nxt;
+                    nxt++;
+                    if(nxt==pts.size()+1) break;
+                }else {
+                    prev=used_pts[used_pts.size()-2];
+                    used_pts_mask[used_pts.back()]=0;
+                    used_pts.pop_back();
+                }
+            }
+            
+            vector<Point> new_pts;
+            for (int i = 0; i < pts.size(); i++) if (used_pts_mask[i]==0) new_pts.pb(pts[i]);
+            pts=new_pts;
+            cnt++;
+            if (pts.size()<3) break;
+
         }
 
-        int cnt=0;
+
+
+
         if (cnt%2==1) cout << "Take this onion to the lab!" << endl;
         else cout << "Do not take this onion to the lab!" << endl;
+        
     }
     exit(0);
 }
