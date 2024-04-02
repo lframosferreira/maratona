@@ -55,13 +55,13 @@ bool cmp(Point a, Point b, Point c){
     if (cross(p1, p2)==0){
         int d1=p1.x*p1.x+p1.y*p1.y;
         int d2 = p2.x*p2.x + p2.y*p2.y;
-        return d1 < d2;
+        if (b.x==c.x and !(b==a) and !(c==a)) return d1 > d2;
+        else return d1 < d2;
     }
     return cross(p1,p2) > 0;
 }
 
 int main(){ _
-    
     while (1){
         int N; cin >> N;
         if (N==0) break;
@@ -72,18 +72,15 @@ int main(){ _
             pts[i]={x, y};
         }
         
-        auto it = min_element(pts.begin(), pts.end());
-        Point mn_pnt = *it;
-
-        sort(pts.begin(), pts.end(), [&mn_pnt](Point u, Point v){
-            return cmp(mn_pnt, u, v);
-        }); // talvez ordenar dnv por hull interna, n tenho ctz
-        
-        
         int cnt=0;
         while (1){
-            for (auto pt: pts) cout << pt.x << "," << pt.y << " ";
-            cout << endl;
+
+            auto it = min_element(pts.begin(), pts.end());
+            Point mn_pnt = *it;
+            sort(pts.begin(), pts.end(), [&mn_pnt](Point u, Point v){
+                return cmp(mn_pnt, u, v);
+            });
+
             vector<int> used_pts;
             vector<int> used_pts_mask(pts.size());
             used_pts.pb(0);
@@ -102,9 +99,10 @@ int main(){ _
                     base=prev;
                     prev=nxt;
                     nxt++;
-                    if(nxt==pts.size()+1) break;
+                    if(nxt==pts.size()) break;
                 }else {
                     prev=used_pts[used_pts.size()-2];
+                    base=used_pts[used_pts.size()-3];
                     used_pts_mask[used_pts.back()]=0;
                     used_pts.pop_back();
                 }
@@ -117,10 +115,6 @@ int main(){ _
             if (pts.size()<3) break;
 
         }
-
-
-
-
         if (cnt%2==1) cout << "Take this onion to the lab!" << endl;
         else cout << "Do not take this onion to the lab!" << endl;
         
