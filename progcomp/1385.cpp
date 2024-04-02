@@ -22,17 +22,21 @@ typedef vector<vi> vvi;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int main(){ _
+// retorna inteiro reporesnetado na string de a ate b incluso
+int f(string &txt, int a, int b){
+    return stoi(txt.substr(a, b-a));
+}
+
+int main(){ 
     int C; cin >> C;
     while (C--){
-        vvi vals(7, vi(7));
+        vvi vals(6, vi(6));
         string line; cin >> line;
         int j = 1;
         while (isdigit(line[j])) j+=2;
         int n=line[j-2]-'0';
-        
-        vector<string> names(n+1);
-        vector<string> nums(n+1);
+        vector<string> names(5);
+        vector<string> nums(5);
         string tp;
         int ppl=0;
         while (cin >> line){
@@ -47,32 +51,9 @@ int main(){ _
             nums[ppl]=line.substr(idx, string::npos);
         }
         
-        for (int i =1; i <= n; i++) { 
-            for (int l = 1; l < nums[i].length()-3; l++){
-                for (int m = l+1; m < nums[i].length()-2; m++){
-                    for (int r = m+1; r < nums[i].length()-1; r++){
-                        int n1, n2, n3, t;
-                        n1=stoi(nums[i].substr(0, l));
-                        n2=stoi(nums[i].substr(l, m-l));
-                        n3=stoi(nums[i].substr(m, r-m));
-                        t=stoi(nums[i].substr(r, string::npos));
-                        if (n1+n2+n3==t){
-                            vals[i][1]=n1;
-                            vals[i][2]=n1;
-                            vals[i][3]=n1;
-                            vals[i][4]=n1;
-                        }
-                    }
-                }
-            }
-        }
-        for (int i = 1; i <= ppl; i++){
-           for (int k = 1; k <= n+1; k++){
-                cout << nums[i][k] << " ";
-            } 
-            cout << endl;
-        } 
 
+
+        
         // printando solução
         // for (int i = 1; i <= n; i++) cout << "P" << i << " ";
         // cout << "Totals" << endl;

@@ -30,6 +30,7 @@ int main(){ _
         vector<string> v(R);
         for (int i = 0; i < R; i++) cin >> v[i];
         vector<vector<int>> dp(R, vector<int>(C));
+
     }
     exit(0);
 }
