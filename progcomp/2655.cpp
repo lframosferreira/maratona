@@ -23,19 +23,19 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e5 + 10;
-int nums[MAX];
+ll monters[MAX];
 ll seg[4*MAX];
 
 ll build(int p, int l, int r){
     if (l==r){
-        ll aux = 1 << nums[l];
+        ll aux = 1LL << monters[l];
         return seg[p]=aux;
     }
     int m = (l+r)/2;
     return seg[p] = build(2*p, l, m) | build(2*p+1, m+1, r);
 }
 
-int query(int a, int b, int p, int l, int r){
+ll query(int a, int b, int p, int l, int r){
     if (b < l or r < a) return 0;
     if (l >= a and r <= b) return seg[p];
     int m = (l+r)/2;
@@ -45,26 +45,25 @@ int query(int a, int b, int p, int l, int r){
 ll update(int i, int x, int p, int l, int r){
     if (i < l or r < i) return seg[p]; 
     if (l==r){
-        seg[p] = seg[p] & ~(1 << nums[i]);
-        seg[p] = seg[p] | (1 << x); 
+        seg[p] = 1LL << x; 
         return seg[p];
     }
     int m = (l+r)/2;
     return seg[p] = update(i, x, 2*p, l, m) | update(i, x, 2*p+1, m+1, r);
 }
 
-int main(){ 
+int main(){ _
     int N;
     cin >> N;
     int Q; cin >> Q;
     int M; cin >> M;
-    for (int i = 1; i <= N; i++) cin >> nums[i];
+    for (int i = 1; i <= N; i++) cin >> monters[i];
     build(1, 1, N); 
     while (Q--){
         int t; cin >> t;
-        int a, b; cin >> a >> b;
+        ll a, b; cin >> a >> b;
         if (t==1){
-            cout << __builtin_popcount(query(a, b, 1, 1, N)) << endl;
+            cout << __builtin_popcountll(query(a, b, 1, 1, N)) << endl;
         }else {
             update(a, b, 1, 1, N);
         }
