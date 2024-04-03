@@ -24,12 +24,11 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e5 + 10;
 int nums[MAX];
-bitset<51> seg[4*MAX];
+ll seg[4*MAX];
 
-bitset<51> build(int p, int l, int r){
+ll build(int p, int l, int r){
     if (l==r){
-        bitset<51> aux;
-        aux[nums[l]]=true;
+        ll aux = 1 << nums[l];
         return seg[p]=aux;
     }
     int m = (l+r)/2;
@@ -38,23 +37,23 @@ bitset<51> build(int p, int l, int r){
 
 int query(int a, int b, int p, int l, int r){
     if (b < l or r < a) return 0;
-    if (l >= a and r <= b) return seg[p].count();
+    if (l >= a and r <= b) return seg[p];
     int m = (l+r)/2;
-    return query(a, b, 2*p, l, m) + query(a, b, 2*p+1, m+1, r);
+    return query(a, b, 2*p, l, m) | query(a, b, 2*p+1, m+1, r);
 }
 
-bitset<51> update(int i, int x, int p, int l, int r){
+ll update(int i, int x, int p, int l, int r){
     if (i < l or r < i) return seg[p]; 
     if (l==r){
-        seg[p][nums[i]]=false;
-        seg[p][x]=true;
+        seg[p] = seg[p] & ~(1 << nums[i]);
+        seg[p] = seg[p] | (1 << x); 
         return seg[p];
     }
     int m = (l+r)/2;
     return seg[p] = update(i, x, 2*p, l, m) | update(i, x, 2*p+1, m+1, r);
 }
 
-int main(){ _
+int main(){ 
     int N;
     cin >> N;
     int Q; cin >> Q;
@@ -65,7 +64,7 @@ int main(){ _
         int t; cin >> t;
         int a, b; cin >> a >> b;
         if (t==1){
-            cout << query(a, b, 1, 1, N) << endl;
+            cout << __builtin_popcount(query(a, b, 1, 1, N)) << endl;
         }else {
             update(a, b, 1, 1, N);
         }
