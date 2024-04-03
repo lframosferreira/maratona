@@ -47,8 +47,8 @@ string btosharp(char x){
 }
 
 template <class T>
-void print(vector<T> v){
-    for (auto s: v) cout << s  << " ";
+void print(const vector<T> &v){
+    for (auto s: v) cout << s << " ";
     cout << endl;
 }
 
@@ -91,8 +91,8 @@ int main(){ _
         }
 
         vector<int> txt, pat;
-        for (int i = 0; i < M; i++) txt.pb(min((mp[melody[i]] - mp[melody[(i+1)%M]])%12, (mp[melody[(i+1)%M]] - mp[melody[i]])%12));
-        for (int i = 0; i < T; i++) txt.pb(min((mp[snippet[i]] - mp[snippet[(i+1)%T]])%12, (mp[snippet[(i+1)%T]] - mp[snippet[i]])%12));
+        for (int i = 0; i < M; i++) txt.pb(min(abs((mp[melody[i]] - mp[melody[(i+1)%M]])%12), abs((mp[melody[(i+1)%M]] - mp[melody[i]])%12)));
+        for (int i = 0; i < T; i++) txt.pb(min(abs((mp[snippet[i]] - mp[snippet[(i+1)%T]])%12), abs((mp[snippet[(i+1)%T]] - mp[snippet[i]])%12)));
         print(txt);
         print(pat);
     }
