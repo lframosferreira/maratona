@@ -58,11 +58,11 @@ void print_dp(){
 
 int main(){ _
     while (cin >> N >> M >> X >> Y){
-        memset(dp, 0, sizeof dp); 
         for (int i = 1; i <= N; i++)
             for (int j = 1; j <= M; j++)
                 cin >> v[i][j];
         // checar caso base
+        reset_dp();
         dp[1][1] = subp{v[1][1], v[1][1] == 0, v[1][1] < 0};
         for (int i = 1; i <= N; i++){
             for (int j = 1; j <= M; j++){
@@ -72,8 +72,12 @@ int main(){ _
                         auto aux = subp{dp[i][j].val + v[i+1][j], dp[i][j].cnt_null+1, dp[i][j].cnt_neg};
                         dp[i+1][j]=min(dp[i+1][j], aux);
                     }
-                    if (v[i+1][j] < 0 and dp[i][j].cnt_neg+1<=X){
+                    if (v[i+1][j] < 0 and dp[i][j].cnt_neg+1<=Y){
                         auto aux = subp{dp[i][j].val + v[i+1][j], dp[i][j].cnt_null, dp[i][j].cnt_neg+1};
+                        dp[i+1][j]=min(dp[i+1][j], aux);
+                    }
+                    if (v[i+1][j] > 0) {
+                        auto aux = subp{dp[i][j].val + v[i+1][j], dp[i][j].cnt_null, dp[i][j].cnt_neg};
                         dp[i+1][j]=min(dp[i+1][j], aux);
                     }
                 }
@@ -83,8 +87,12 @@ int main(){ _
                         auto aux = subp{dp[i][j].val + v[i][j+1], dp[i][j].cnt_null+1, dp[i][j].cnt_neg};
                         dp[i][j+1]=min(dp[i][j+1], aux);
                     }
-                    if (v[i][j+1] < 0 and dp[i][j].cnt_neg+1<=X){
+                    if (v[i][j+1] < 0 and dp[i][j].cnt_neg+1<=Y){
                         auto aux = subp{dp[i][j].val + v[i][j+1], dp[i][j].cnt_null, dp[i][j].cnt_neg+1};
+                        dp[i][j+1]=min(dp[i][j+1], aux);
+                    }
+                    if (v[i][j+1] > 0) {
+                        auto aux = subp{dp[i][j].val + v[i][j+1], dp[i][j].cnt_null, dp[i][j].cnt_neg};
                         dp[i][j+1]=min(dp[i][j+1], aux);
                     }
                 }
@@ -94,8 +102,12 @@ int main(){ _
                         auto aux = subp{dp[i][j].val + v[i][j-1], dp[i][j].cnt_null+1, dp[i][j].cnt_neg};
                         dp[i][j+1]=min(dp[i][j-1], aux);
                     }
-                    if (v[i][j-1] < 0 and dp[i][j].cnt_neg+1<=X){
+                    if (v[i][j-1] < 0 and dp[i][j].cnt_neg+1<=Y){
                         auto aux = subp{dp[i][j].val + v[i][j-1], dp[i][j].cnt_null, dp[i][j].cnt_neg+1};
+                        dp[i][j-1]=min(dp[i][j-1], aux);
+                    }
+                    if (v[i][j-1] > 0) {
+                        auto aux = subp{dp[i][j].val + v[i][j-1], dp[i][j].cnt_null, dp[i][j].cnt_neg};
                         dp[i][j-1]=min(dp[i][j-1], aux);
                     }
                 }
