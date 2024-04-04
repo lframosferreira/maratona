@@ -22,6 +22,30 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+string btosharp(char x){
+    char aux;
+    switch (x){
+        case 'D':
+            aux = 'C';
+            break;
+        case 'E':
+            aux = 'D';
+            break;
+        case 'G':
+            aux = 'F';
+            break;
+        case 'A':
+            aux = 'G';
+            break;
+        case 'B':
+            aux = 'A';
+            break;
+        default:
+            break;
+    }
+    return string(1, aux);
+}
+
 template <class T>
 void print(const vector<T> &v){
     for (auto s: v) cout << s << " ";
@@ -32,25 +56,16 @@ void print(const vector<T> &v){
 map<std::string, int> mp = {
         {"A", 0},
         {"A#", 1},
-        {"Bb", 1},
         {"B", 2},
-        {"Cb", 2},
-        {"B#", 3},
         {"C", 3},
         {"C#", 4},
-        {"Db", 4},
         {"D", 5},
         {"D#", 6},
-        {"Eb", 6},
         {"E", 7},
-        {"Fb", 7},
-        {"E#", 8},
         {"F", 8},
         {"F#", 9},
-        {"Gb", 9},
         {"G", 10},
-        {"G#", 11},
-        {"Ab", 11},
+        {"G#", 11}
     };
 
 vi prefix(const vector<int> &v){
@@ -76,17 +91,24 @@ bool match(const vi &txt, const vi &pat){
 }
 
 int main(){ _
+    vector<string> notes = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
     while (1){
         int M, T; cin >> M >> T;
         if (M==0 and T==0) break;
-        vector<string> melody(M);
+        vector<string> melody(M); // i is dist from i to i + 1, same for below
         vector<string> snippet(T);
         for (int i = 0; i < M; i++){
             string note; cin >> note;
+            if (note.length()==2 and note[1]=='b'){
+                note=btosharp(note[0])+"#";
+            }
             melody[i]=note;
         }
         for (int i = 0; i < T; i++){
             string note; cin >> note;
+            if (note.length()==2 and note[1]=='b'){
+                note=btosharp(note[0])+"#";
+            }
             snippet[i]=note;
         }
 
@@ -99,7 +121,7 @@ int main(){ _
         };
         for (int i = 0; i < M-1; i++) txt.pb(func(i,melody));
         for (int i = 0; i < T-1; i++) pat.pb(func(i, snippet));
-        
+
         if (match(txt, pat)) cout << "S" << endl;
         else cout << "N" << endl;
     }
