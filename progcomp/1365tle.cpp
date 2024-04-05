@@ -50,15 +50,21 @@ int main(){ _
             } 
         }
         int ans=INT_MAX; 
+        for (int i = 1; i <= R; i++)
+        {
+            for (int j = 1; j <= C; j++){
+                cout << dp[i][j] << " ";
+            }
+            cout << endl;
+        }
         for (int i = 1; i <= R; i++){
             for (int j = 1; j <= C; j++){
                 if (dp[i][j] >= K) ans=min(ans, (i)*(j));
-                for (int a = i; a >= 0; a--){
-                    for (int b = j; b >= 0; b--){
+                for (int a = 1; a <= i; a++){
+                    for (int b = 1; b <= j; b++){
                         if (a==i and b==j) continue;
                         if (dp[i][j] - dp[a][j]*(i!=a) - dp[i][b]*(j!=b)+dp[a][b]*(i!=a and j!=b) >= K) {
                             ans=min(ans, (a==i? a : i-a)*(j==b ? j :j-b));
-                            break;
                         }
                     }
                 }
