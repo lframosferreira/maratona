@@ -50,13 +50,6 @@ int main(){ _
             } 
         }
         int ans=INT_MAX; 
-        for (int i = 1; i <= R; i++)
-        {
-            for (int j = 1; j <= C; j++){
-                cout << dp[i][j] << " ";
-            }
-            cout << endl;
-        }
         for (int i = 1; i <= R; i++){
             for (int j = 1; j <= C; j++){
                 if (dp[i][j] >= K) ans=min(ans, (i)*(j));

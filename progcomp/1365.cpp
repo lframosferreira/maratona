@@ -1,4 +1,5 @@
 // pescoço pra baixo é canela
+// NAO ENVIAR ASSIM
 
 #include <bits/stdc++.h>
 
@@ -50,16 +51,14 @@ int main(){ _
             } 
         }
         int ans=INT_MAX; 
-        for (int i = 1; i <= R; i++){
+        // NAO ENVIAR ASSIM
+        for (int i = 1; i <= C; i++){
             for (int j = 1; j <= C; j++){
-                if (dp[i][j] >= K) ans=min(ans, (i)*(j));
-                for (int a = i; a >= 0; a--){
-                    for (int b = j; b >= 0; b--){
-                        if (a==i and b==j) continue;
-                        if (dp[i][j] - dp[a][j]*(i!=a) - dp[i][b]*(j!=b)+dp[a][b]*(i!=a and j!=b) >= K) {
-                            ans=min(ans, (a==i? a : i-a)*(j==b ? j :j-b));
-                            break;
-                        }
+                int p=1;
+                for (int w=1; w <= R; w++){
+                    while (dp[w][j] - dp[w][i-1] - dp[p-1][j] + dp[p-1][i-1] >= K){
+                        ans=min(ans, (w-p+1)*(j-i+1));
+                        p++;
                     }
                 }
             }
