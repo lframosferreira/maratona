@@ -39,16 +39,29 @@ int main(){ _
         }
         for (int i = 1; i <= N; i++){
             for (int j = 1; j <= K; j++){
-                double x = dp[i-1][j] + premios[i]*(acumulada[i-1][j]*((double)chance[i] / 100.0));
+                double x = dp[i-1][j] + (double)premios[i]*(acumulada[i-1][j]*((double)chance[i] / 100.0));
                 double y = dp[i-1][j-1] + (double)premios[i] * acumulada[i-1][j-1];
-                if (x > y){
-                    dp[i][j] += x;
+                if (x >= y){
+                    dp[i][j] = x;
                     acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i-1][j];
                 }else {
-                    dp[i][j]+=y;
+                    dp[i][j]=y;
                     acumulada[i][j] = acumulada[i-1][j-1];
                 }
             }
+        }
+        for (int i = 0; i <= N; i++){
+            for (int j = 0; j <= K; j++){
+                cout << dp[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << "----" << endl;
+        for (int i = 0; i <= N; i++){
+            for (int j = 0; j <= K; j++){
+                cout << acumulada[i][j] << " ";
+            }
+            cout << endl;
         }
         cout << dp[N][K] << endl;
     }
