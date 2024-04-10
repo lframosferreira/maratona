@@ -23,47 +23,45 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+int N, K;
+
+void printdp(vector<vector<double>> &v){
+    for (int i = 0; i <= N; i++){
+        for (int j = 0; j <= K; j++){
+            cout << v[i][j] << " ";
+        }
+        cout << endl;
+    }    
+    cout << "-----"<< endl;
+}
+
 int main(){ _
     cout << fixed << setprecision(2);
-    int N, K;
     while (cin >> N >> K){
         vi premios(N+1);
         for (int i = 1; i <= N; i++) cin >> premios[i];
         vi chance(N+1);
         for (int i = 1; i <= N; i++) cin >> chance[i];
-        vector<vector<double>> dp(N+1, vector<double>(K+1));
-        vector<vector<double>> acumulada(N+1, vector<double>(K+1, 1.0));
+        vector<vector<double>> dp1(N+1, vector<double>(K+1));
+        vector<vector<double>> acumulada1(N+1, vector<double>(K+1, 1.0));
         for (int i = 1; i <= N; i++) {
-            dp[i][0] += dp[i-1][0] + premios[i] * (acumulada[i-1][0] * ((double)chance[i] / 100.0));
-            acumulada[i][0] =  ((double)chance[i] / 100.0) *acumulada[i-1][0];
+            dp1[i][0] += dp1[i-1][0] + premios[i] * (acumulada1[i-1][0] * ((double)chance[i] / 100.0));
+            acumulada1[i][0] =  ((double)chance[i] / 100.0) *acumulada1[i-1][0];
         }
         for (int i = 1; i <= N; i++){
             for (int j = 1; j <= K; j++){
-                double x = dp[i-1][j] + (double)premios[i]*(acumulada[i-1][j]*((double)chance[i] / 100.0));
-                double y = dp[i-1][j-1] + (double)premios[i] * acumulada[i-1][j-1];
+                double x = dp1[i-1][j] + (double)premios[i]*(acumulada1[i-1][j]*((double)chance[i] / 100.0));
+                double y = dp1[i-1][j-1] + (double)premios[i] * acumulada1[i-1][j-1];
                 if (x >= y){
-                    dp[i][j] = x;
-                    acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i-1][j];
+                    dp1[i][j] = x;
+                    acumulada1[i][j] = ((double)chance[i] / 100.0) *acumulada1[i-1][j];
                 }else {
-                    dp[i][j]=y;
-                    acumulada[i][j] = acumulada[i-1][j-1];
+                    dp1[i][j]=y;
+                    acumulada1[i][j] = acumulada1[i-1][j-1];
                 }
             }
         }
-        for (int i = 0; i <= N; i++){
-            for (int j = 0; j <= K; j++){
-                cout << dp[i][j] << " ";
-            }
-            cout << endl;
-        }
-        cout << "----" << endl;
-        for (int i = 0; i <= N; i++){
-            for (int j = 0; j <= K; j++){
-                cout << acumulada[i][j] << " ";
-            }
-            cout << endl;
-        }
-        cout << dp[N][K] << endl;
+        printdp(dp1);
     }
     exit(0);
 }
