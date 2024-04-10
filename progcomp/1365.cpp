@@ -51,7 +51,6 @@ int main(){ _
             } 
         }
         int ans=INT_MAX; 
-        // NAO ENVIAR ASSIM
         for (int i = 1; i <= C; i++){
             for (int j = 1; j <= C; j++){
                 int p=1;
