@@ -42,7 +42,7 @@ int main(){ _
         for (int i = 1; i <= N; i++) cin >> premios[i];
         vi chance(N+1);
         for (int i = 1; i <= N; i++) cin >> chance[i];
-        vector<vector<vector<double>>> dp1(N+1, vector<double>(N+1, vector<double>(K+1)));
+        vector<vector<double>> dp1(N+1, vector<double>(K+1));
         vector<vector<double>> acumulada1(N+1, vector<double>(K+1, 1.0));
         for (int i = 1; i <= N; i++) {
             dp1[i][0] += dp1[i-1][0] + premios[i] * (acumulada1[i-1][0] * ((double)chance[i] / 100.0));

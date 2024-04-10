@@ -19,6 +19,8 @@ typedef pair<ll, ll> pll;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 typedef vector<ll> vll;
+typedef vector<double> vd;
+typedef vector<vd> vdd;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
