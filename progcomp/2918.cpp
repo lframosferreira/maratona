@@ -32,11 +32,20 @@ ll L, R;
 
 ll dp[MAX];
 
+ll sum_dig(ll x){
+    ll ret = 0;
+    while (x){
+        ret+=x%10;
+        x/=10;
+    }
+    return ret;
+}
+
 int main(){ _
     dp[0]=0;
-    for (int i = 1; i < MAX-5;i++)dp[i]=(dp[i-1]+i%10+dp[i/10])%MOD;
+    for (int i = 1; i < MAX-5;i++)dp[i]=(dp[i-1]+sum_dig(i))%MOD;
     while (cin >> L >> R){
-        cout << dp[R]-dp[L] << endl; 
+        cout << dp[R]-dp[L-1] << endl; 
     } 
     exit(0);
 }
