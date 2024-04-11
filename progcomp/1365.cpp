@@ -52,12 +52,14 @@ int main(){ _
         }
         int ans=INT_MAX; 
         for (int i = 1; i <= C; i++){
-            for (int j = 1; j <= C; j++){
-                int p=1;
+            for (int j = i; j <= C; j++){
+                int q=1;
                 for (int w=1; w <= R; w++){
-                    while (dp[w][j] - dp[w][i-1] - dp[p-1][j] + dp[p-1][i-1] >= K){
-                        ans=min(ans, (w-p+1)*(j-i+1));
-                        p++;
+                    while (1){
+                        if (dp[w][j] - dp[w][i-1] - dp[q-1][j] + dp[q-1][i-1] >= K){
+                            ans=min(ans, (w-q+1)*(j-i+1));
+                        }else break;
+                        q++;
                     }
                 }
             }

@@ -25,28 +25,20 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 10e6+5;
-const ll MOD=1e9+7;
-
-ll L, R;
-
-ll dp[MAX];
-
-ll sum_dig(ll x){
-    ll ret = 0;
-    while (x){
-        ret+=x%10;
-        x/=10;
-    }
-    return ret;
-}
+int S, B;
 
 int main(){ _
-    dp[0]=0;
-    for (int i = 1; i < MAX-5;i++)dp[i]=(dp[i-1]+sum_dig(i))%MOD;
-    for (int i = 0; i < 50; i++) cout << i << ": " << dp[i] << endl;
-    while (cin >> L >> R){
-        cout << dp[R]-dp[L-1] << endl; 
-    } 
+    while (1){
+        cin >> S >> B;
+        if (S==0 and B==0) break; 
+        vi roleta(S); for (int &i: roleta) cin >> i;
+        vi bolas(B);for (int &i: bolas) cin >> i;
+        vvi dp(S, vi(B));
+        for (int i = 0; i < S; i++){
+            for (int j = 0; j < B; j++){
+                dp[i][j] =         
+            }
+        }
+    }    
     exit(0);
 }
