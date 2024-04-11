@@ -25,7 +25,7 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 10e8+5;
+const int MAX = 10e5+5;
 const ll MOD=1e9+7;
 
 ll L, R;
