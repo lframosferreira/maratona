@@ -30,23 +30,19 @@ int main(){ _
         for (int &i: v) cin >> i;
         vector<vector<int>> dp(2*N, vector<int>(2*N));
         for (int i = 0; i < 2*N; i++) dp[i][i]=0;
-        for (int i = 0; i < 2*N; i++){
-            for (int j = 0; j + i < 2*N; j++){
-                int a,b;
-                int k=i+j;
-                int myturn = (k-j)%2==0; 
-                a=dp[j+1][k] + (v[j]%2==0) * myturn; 
-                b=dp[j][k-1] + (v[k]%2==0) * myturn; 
-                dp[j][k]= myturn ? max(a, b) : min(a, b);
+        for (int j = 0; j < 2*N; j++){
+            for (int i = j; i >= 0; i--){ 
+                if (i==j){
+                    dp[i][j]=0;
+                    continue;
+                }
+                int myturn = (i-j+1)%2==0; 
+                int a=dp[i+1][j] + (v[i]%2==0) * myturn; 
+                int b=dp[i][j-1] + (v[j]%2==0) * myturn; 
+                dp[i][j]= myturn ? max(a, b) : min(a, b);
             }
         }
-        for (int i = 0; i < 2*N; i++){
-            for (int j = 0; j < 2*N; j++){
-                cout << dp[i][j] << " ";
-            }
-            cout << endl;
-        }
-        cout << "----" << endl;
+        cout << dp[0][2*N-1] << endl;
     }
     exit(0);
 }
