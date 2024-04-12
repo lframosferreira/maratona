@@ -42,11 +42,10 @@ ll sum_dig(ll x){
 }
 
 int main(){ _
-    dp[0]=0;
-    for (int i = 1; i < MAX-5;i++)dp[i]=(dp[i-1]+sum_dig(i))%MOD;
-    for (int i = 0; i < 50; i++) cout << i << ": " << dp[i] << endl;
     while (cin >> L >> R){
-        cout << dp[R]-dp[L-1] << endl; 
+        ll ans=0;
+        for (ll i = L; i <= R; i++) ans+=sum_dig(i)%MOD;
+        cout << ans << endl; 
     } 
     exit(0);
 }
