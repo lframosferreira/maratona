@@ -25,26 +25,17 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 10e6+5;
-const ll MOD=1e9+7;
-
-ll L, R;
-
-ll dp[MAX];
-
-ll sum_dig(ll x){
-    ll ret = 0;
-    while (x){
-        ret+=x%10;
-        x/=10;
-    }
-    return ret;
-}
+int v[2010];
 
 int main(){ _
-    while (cin >> L >> R){
-        ll ans=0;
-        cout << sum_dig(L) << endl;
-    } 
+    int N; cin >> N;
+    memset(v, 0, sizeof v);
+    while (N--){
+        int X; cin >> X;
+        v[X]++;
+    }    
+    for (int i = 1; i <=2000;i++){
+        if (v[i]) cout << i << " aparece " << v[i] << " vez(es)" << endl;
+    }
     exit(0);
 }
