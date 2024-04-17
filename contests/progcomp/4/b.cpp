@@ -26,6 +26,11 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int t; cin >> t;
+    while (t--){
+        int n,m,k;cin >> n >> m >> k;
+        if (n*m-1==k) cout << "YES" << endl;
+        else cout << "NO" << endl;
+    }    
     exit(0);
 }

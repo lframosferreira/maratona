@@ -26,6 +26,23 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int t; cin >> t;
+    while (t--){
+        int n; cin >> n;
+        string r, b; cin >> r >> b;
+        vi vr, vb;
+        for (int i = 0; i < n; i++){
+            vr.pb(r[i]-'0');vb.pb(b[i]-'0');
+        }
+        int cnt_r=0, cnt_b=0;
+        for (int i = 0; i < n; i++){
+            if (vr[i]>vb[i]) cnt_r++;
+            else if(vr[i]<vb[i]) cnt_b++;
+            else {cnt_r++;cnt_b++;}
+        }
+        if (cnt_r==cnt_b) cout << "EQUAL" << endl;
+        else if (cnt_r > cnt_b) cout << "RED" << endl;
+        else cout << "BLUE" << endl;
+    }    
     exit(0);
 }
