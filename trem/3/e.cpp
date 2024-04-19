@@ -26,6 +26,18 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int n; cin >> n;
+    vi a(n+1);
+    for (int i = 1; i <= n; i++) cin >> a[i];
+    ll cnt=0, cnt2=0;
+    for (int i = 1; i <=n; i++){
+        if (i==a[i]){
+            cnt++;
+        }
+        else if (i==a[a[i]]){
+            cnt2++; 
+        }
+    }    
+    cout << ((cnt)*(cnt-1))/2  + cnt2/2 << endl;
     exit(0);
 }

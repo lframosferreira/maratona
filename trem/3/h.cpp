@@ -26,6 +26,15 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int t; cin >> t;
+    while (t--){
+        int n, x; cin >> n >> x;
+        if (n <=2) cout << 1 << endl;
+        else{
+            n=n-2;
+            if (n%x==0) cout << n/x + 1 << endl;
+            else cout << n/x + 2 << endl;
+        }
+    }    
     exit(0);
 }

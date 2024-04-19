@@ -26,6 +26,19 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int n, a, b; cin >> n >> a >> b;
+    int mx=-INF;
+    vi v(n);
+    int idx;
+    for (int i = 0; i < n; i++){
+        cin >> v[i];
+        if (v[i] > mx){
+            mx=v[i];
+            idx=i;
+        }
+    }
+    int ans=0;
+     
+        
     exit(0);
 }

@@ -26,6 +26,32 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int n; cin >> n;
+    string b; cin >> b;
+    string ans; int pts=0;
+    ans.pb('L');
+    int cnt=-1;
+    for (int i = 1; i < n; i++){
+        if (b[i]=='L' and cnt < 0){
+            cnt++;
+            ans.pb('R');
+            pts++;
+        }
+        else if (b[i]=='L' and cnt >= 0){
+            cnt--;
+            ans.pb('L');
+        }
+        else if (b[i]=='R' and cnt < 0){
+            cnt++;
+            ans.pb('R');
+        }
+        else {
+            pts--;
+            cnt--;
+            ans.pb('L');
+        }
+    }    
+    cout << pts << endl;
+    cout << ans << endl;
     exit(0);
 }

@@ -25,7 +25,36 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+string st; ll x, y, n, m, q, l, r;
+
+const int MAX = 5e3 + 10;
+int dp[MAX][MAX];
+
 int main(){ _
+    cin >> n >> q;    
+    cin >> st;
+    st='#'+st;
+    cin >> l >> r;
+    cin >> x >> y;
     
+    memset(dp, 0, sizeof dp);
+    for (int j = 1; j <= n; j++){
+        for (int i = j; i >= 1; i--){
+            if (i==j) continue;
+            if (i+1==j) dp[i][j] = st[i]!=st[j]; 
+            else {
+                dp[i][j]=(int)(st[i]!=st[j]) + dp[i+1][j-1];
+            }
+        }
+    }
+
+    ll ans=0;
+    ans+=dp[l][r];;
+    for (int j = 2; j <= q; j++){
+        l = (l*y + (r*x)/n + 999999999) % n + 1;
+        r = max(l, (r*x + y + 999999999) % n + 1);
+        ans+=dp[l][r];
+    }
+    cout << ans << endl;
     exit(0);
 }
