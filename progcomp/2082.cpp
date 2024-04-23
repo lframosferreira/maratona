@@ -25,18 +25,32 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int N, I, M, P;
+const int MAX = 110;
+bool vis[MAX];
+vector<vector<Edge>> g;
+
+vi A;
+
+int minimum_cut_phase(){
+    
+}
 
 int main(){ _
-    while (cin >> N >> I >> M >> P){
-        vi custo(M); for (int &i: custo) cin >> i;
-        vi venda(M); for (int &i: venda) cin >> i;
-        vvi dp(N, vi(M));
-        for (int i = 1; i < N; i++){
-            for (int j = I; j < M; j++){
-                if (
-            }
+    int t; cin >> t;
+    while (t--){
+        int N, M; cin >> N >> M;
+        g.clear();
+        g.resize(N+1);
+        for (int i = 0; i < M; i++){
+            int u, v, c; cin >> u >> v >> c;
+            g[v].pb({u, c});
+            g[u].pb({v, c});
         }
-    } 
+        int cnt=N;
+        while (cnt>1){
+            ans=min(ans, minimum_cut_phase());
+        }
+        cout << ans << endl;
+    }    
     exit(0);
 }
