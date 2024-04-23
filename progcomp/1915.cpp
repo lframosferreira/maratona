@@ -64,6 +64,11 @@ bool bfs(int u){
 
 int dp[110][110];
 
+void print_v(vi &v){
+    for (int &i: v) cout << i << " ";
+    cout << endl;
+}
+
 int dist(vi &a, vi &b){
     memset(dp, 0, sizeof dp); 
     for (int i = a.size()-1; i>=0; i--){
@@ -78,54 +83,82 @@ int dist(vi &a, vi &b){
     return a.size() + b.size() - 2*dp[0][0];
 }
 
-int cnt[27];
+int cnt[30];
+
+vvi nomes, brinquedos;
 
 int main(){ _
+    cout << fixed << setprecision(2);
     while (1){
         cin >> N >> M;
         if (N==0 and M ==0) break; 
-        g.clear();g.resize(N+M+2);
-        vvi nomes(N+1);
-        vvi brinquedos(M+1); 
+        g.clear();g.resize(N+M+5);
+        nomes.clear();brinquedos.clear();
+        nomes.resize(N+1);brinquedos.resize(M+1);
         for (int i = 1; i <= N; i++){
             string nome; cin >> nome;
             memset(cnt, 0, sizeof cnt);
-            vi v(nome.size()); 
             for (int j = 0; j < nome.size(); j++){
-                v[j]=(nome[j]-'A')+1 + 26*cnt[(nome[j]-'A')+1]; 
+                nomes[i].pb((nome[j]-'A')+1 + 26*cnt[(nome[j]-'A')+1]); 
                 cnt[(nome[j]-'A')+1]++;
             }
-            nomes[i]=v;
         }
 
         for (int i = 1; i <= M; i++){
             string brinq; cin >> brinq;
             memset(cnt, 0, sizeof cnt);
-            vi v(brinq.size()); 
             for (int j = 0; j < brinq.size(); j++){
-                v[j]=(brinq[j]-'A')+1 + 26*cnt[(brinq[j]-'A')+1]; 
+                brinquedos[i].pb((brinq[j]-'A')+1 + 26*cnt[(brinq[j]-'A')+1]); 
                 cnt[(brinq[j]-'A')+1]++;
             }
-            brinquedos[i]=v;
         }
         
-        // cria grafo
+        src=0;tgt=N+M+1;
+
+        // criar arestas da src
         for (int i = 1; i <= N; i++){
-            for (int j = i+1; j <= M; j++){
+            g[src].pb({i, 1, g[i].size()});
+            g[i].pb({src, 0, g[src].size()-1});
+        } 
+
+        // cria grafo do 'meio'
+        for (int i = 1; i <= N; i++){
+            for (int j = 1; j <= M; j++){
                 if (dist(nomes[i], brinquedos[j])%5==0){
-                    g[i].pb({j, 1, g[j].size()});
-                    g[j].pb({i, 0, g[i].size()-1});
+                    g[i].pb({j+N, 1, g[j+N].size()});
+                    g[j+N].pb({i, 0, g[i].size()-1});
                 }
             }
         }
 
-        // criar arestas da src
-
         // criar arestas do tgt
-        
-
-        // roda edmond karp
-
+        for (int j = 1; j <= M; j++){
+            g[j+N].pb({tgt, 1, g[tgt].size()});
+            g[tgt].pb({j+N, 0, g[j+N].size()-1});
+        }        
+        int ans=0; 
+        while (1){
+            memset(vis, false, sizeof vis);
+            if (!bfs(src)) break;
+            int aux_tgt=tgt;
+            gargalo=INT_MAX;
+            while (true){
+                gargalo=min(gargalo, g[par[aux_tgt].f][par[aux_tgt].s].w);
+                aux_tgt=par[aux_tgt].f;
+                if (aux_tgt==src) break;
+            }
+            aux_tgt=tgt;
+            while (true){
+                auto [u, idx] = par[aux_tgt];
+                g[u][idx].w-=gargalo;
+                int rev_idx=g[u][idx].rev_idx;
+                g[aux_tgt][rev_idx].w+=gargalo;
+                aux_tgt=u;
+                if (aux_tgt==src) break;
+            }
+            ans+=gargalo;
+        }
+        cout << "P = " << ((double)ans/(double)N)*100.0 << endl;
     } 
     exit(0);
 }

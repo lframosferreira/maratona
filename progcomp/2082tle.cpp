@@ -33,37 +33,35 @@ struct Edge {
     int rev_idx;
 };
 
-vector<pii> aug_path;
+int src, tgt;
+pii par[MAX];
 int gargalo;
-int tgt, src;
-bool found;
 bool vis[MAX];
-
 vector<vector<Edge>> g;
 vector<vector<Edge>> h;
 
-void dfs(int u){
-    if (found) return;
-    if (u==tgt) {
-        found=true;
-        return;
-    }
-    if (vis[u]) return;
+bool bfs(int u){
+    queue<int> q;
+    q.push(u);
     vis[u]=true;
-    for (int j = 0; j < h[u].size(); j++){
-        if(found) continue;
-        auto [v, w, rev_idx]= h[u][j];
-        if (w <= 0) continue;
-        int prev=gargalo;
-        gargalo=min(gargalo, w);
-        aug_path.pb({u, j});
-        dfs(v);
-        if (!found){
-            gargalo=prev;
-            aug_path.pop_back();
+    while (!q.empty()){
+        auto v=q.front();q.pop();
+        for (int i = 0; i < h[v].size(); i++){
+            auto edg=h[v][i];
+            if (edg.w <=0) continue;
+            if (vis[edg.to]) continue;
+            vis[edg.to]=true;
+            if (edg.to==tgt){
+                par[edg.to]={v, i};
+                return true;
+            }
+            par[edg.to]={v, i};
+            q.push(edg.to);
         }
     }
+    return false;
 }
+
 
 int main(){ _
     int t; cin >> t;
@@ -91,15 +89,22 @@ int main(){ _
             int ans=0;
             while (1){
                 memset(vis, false, sizeof vis);
-                aug_path.clear();
+                if (!bfs(src)) break;
+                int aux_tgt=tgt;
                 gargalo=INT_MAX;
-                found=false;
-                dfs(src);
-                if (!found) break; 
-                for (auto [u, idx] : aug_path){
-                h[u][idx].w-=gargalo;
-                int rev_idx=h[u][idx].rev_idx;
-                h[h[u][idx].to][rev_idx].w+=gargalo;
+                while (true){
+                    gargalo=min(gargalo, h[par[aux_tgt].f][par[aux_tgt].s].w);
+                    aux_tgt=par[aux_tgt].f;
+                    if (aux_tgt==src) break;
+                }
+                aux_tgt=tgt;
+                while (true){
+                    auto [u, idx] = par[aux_tgt];
+                    h[u][idx].w-=gargalo;
+                    int rev_idx=h[u][idx].rev_idx;
+                    h[aux_tgt][rev_idx].w+=gargalo;
+                    aux_tgt=u;
+                    if (aux_tgt==src) break;
                 }
                 ans+=gargalo;
             }
