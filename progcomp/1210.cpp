@@ -34,7 +34,7 @@ int main(){ _
         vvi dp(N, vi(M));
         for (int i = 1; i < N; i++){
             for (int j = I; j < M; j++){
-                if (
+                if (dp[i
             }
         }
     } 
