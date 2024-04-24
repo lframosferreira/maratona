@@ -42,6 +42,16 @@ ll fexp(ll a, ll b){
     return ans;
 }
 
+ll fexp2(ll a, ll b){
+    ll ans=1;
+    while (b){
+        if (b & 1) ans=ans*a; 
+        a=a*a;
+        b >>=1;
+    }
+    return ans;
+}
+
 ll calc(ll n){
     //if (dp[n] != -1) return dp[n];
     if (n <=9) return dp[n];
@@ -51,7 +61,7 @@ ll calc(ll n){
         a/=10;
         cnt++;
     }
-    ll b=n%(fexp(10, cnt));
+    ll b=n%(fexp2(10, cnt));
     ll val;
     if (a&1) val = a * ((a-1)/2) % MOD;
     else val = (a/2)*(a-1) % MOD;
@@ -64,7 +74,9 @@ int main(){
         dp[i]=i+dp[i-1];
     }
     while (cin >> L >> R){
-        cout << (calc(R) - calc(L-1))%MOD << endl;
+        ll ans = calc(R)-calc(L-1);
+        cout << (ans%MOD + MOD)%MOD << endl;
     } 
     exit(0);
 }
+
