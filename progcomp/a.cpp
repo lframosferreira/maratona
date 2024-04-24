@@ -64,7 +64,8 @@ int main(){
         dp[i]=i+dp[i-1];
     }
     while (cin >> L >> R){
-        cout << (calc(R) - calc(L-1))%MOD << endl;
+        ll ans = calc(R)-calc(L-1);
+        cout << (ans%MOD + MOD)%MOD << endl;
     } 
     exit(0);
 }
