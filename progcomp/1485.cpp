@@ -34,11 +34,16 @@ int main(){ _
         vi roleta(S); for (int &i: roleta) cin >> i;
         vi bolas(B);for (int &i: bolas) cin >> i;
         vvi dp(S, vi(B));
+        int ans=INF;
         for (int i = 0; i < S; i++){
             for (int j = 0; j < B; j++){
-                dp[i][j] =         
+                for (int k = 0; k < i; k++){
+                    dp[i][j]=min(dp[i-1][j], bolas[j]*(roleta[i%S]+roleta[(i+1)%S]));
+                }
             }
+            ans=min(ans, dp[S-1][B-1]);
         }
+        cout << ans << endl;
     }    
     exit(0);
 }

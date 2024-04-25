@@ -10,6 +10,11 @@ using namespace std;
 #define s second
 #define pb push_back
 #define mp make_pair
+#define bs bitset
+#define umap unordered_map
+#define uset unordered_set
+#define all(v) begin(v), end(v)
+#define rall(v) rbegin(v), rend(v)
 
 #define dbg(x) cout << #x << " = " << x << endl
 

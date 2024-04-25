@@ -49,15 +49,15 @@ int main(){ _
             acumulada[N][i] = i > 0 ? 1.0 : (double)chance[N]/100.0;
         }
         for (int i = N-1; i >= 0; i--){
-            for (int j = 1; j <= K; j++){
-                double x = dp[i+1][j-1] + (double)premios[i]*acumulada[i+1][j-1];
+            for (int j = K-1; j >= 0; j--){
+                double x = dp[i+1][j+1] + (double)premios[i]*acumulada[i+1][j+1];
                 double y = ((double) chance[i]/100.0)*dp[i+1][j]+ (double)premios[i]*((double)chance[i]/100.0)*acumulada[i+1][j];
                 if (y >= x){
                     dp[i][j] = y;
                     acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i+1][j];
                 }else {
                     dp[i][j]=x;
-                    acumulada[i][j] = acumulada[i+1][j-1];
+                    acumulada[i][j] = acumulada[i+1][j+1];
                 }
             }
         }
