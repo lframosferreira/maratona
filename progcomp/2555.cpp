@@ -42,26 +42,28 @@ int main(){ _
         for (int i = 1; i <= N; i++) cin >> premios[i];
         vi chance(N+1);
         for (int i = 1; i <= N; i++) cin >> chance[i];
-        vector<vector<double>> dp1(N+1, vector<double>(K+1));
-        vector<vector<double>> acumulada1(N+1, vector<double>(K+1, 1.0));
-        for (int i = 1; i <= N; i++) {
-            dp1[i][0] += dp1[i-1][0] + premios[i] * (acumulada1[i-1][0] * ((double)chance[i] / 100.0));
-            acumulada1[i][0] =  ((double)chance[i] / 100.0) *acumulada1[i-1][0];
+        vector<vector<double>> dp(N+1, vector<double>(K+1));
+        vector<vector<double>> acumulada(N+1, vector<double>(K+1));
+        for (int i = 0; i <= K; i++){
+            dp[N][i] = i > 0 ? (double)premios[N] : (double)premios[N]*((double)chance[N]/100.0);
+            acumulada[N][i] = i > 0 ? 1.0 : (double)chance[N]/100.0;
         }
-        for (int i = 1; i <= N; i++){
+        for (int i = N-1; i >= 0; i--){
             for (int j = 1; j <= K; j++){
-                double x = dp1[i-1][j] + (double)premios[i]*(acumulada1[i-1][j]*((double)chance[i] / 100.0));
-                double y = dp1[i-1][j-1] + (double)premios[i] * acumulada1[i-1][j-1];
-                if (x >= y){
-                    dp1[i][j] = x;
-                    acumulada1[i][j] = ((double)chance[i] / 100.0) *acumulada1[i-1][j];
+                double x = dp[i+1][j-1] + (double)premios[i]*acumulada[i+1][j-1];
+                double y = ((double) chance[i]/100.0)*dp[i+1][j]+ (double)premios[i]*((double)chance[i]/100.0)*acumulada[i+1][j];
+                if (y >= x){
+                    dp[i][j] = y;
+                    acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i+1][j];
                 }else {
-                    dp1[i][j]=y;
-                    acumulada1[i][j] = acumulada1[i-1][j-1];
+                    dp[i][j]=x;
+                    acumulada[i][j] = acumulada[i+1][j-1];
                 }
             }
         }
-        printdp(dp1);
+        printdp(dp);
+        
+        printdp(acumulada);
     }
     exit(0);
 }
