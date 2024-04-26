@@ -41,11 +41,11 @@ vector<vector<Edge>> g;
 vector<vector<Edge>> h;
 
 bool bfs(int u){
-    queue<int> q;
-    q.push(u);
+    queue<pii> q;
+    q.push({u, INF});
     vis[u]=true;
     while (!q.empty()){
-        auto v=q.front();q.pop();
+        auto [v, curr_flow]=q.front();q.pop();
         for (int i = 0; i < h[v].size(); i++){
             auto edg=h[v][i];
             if (edg.w <=0) continue;
@@ -53,13 +53,13 @@ bool bfs(int u){
             vis[edg.to]=true;
             if (edg.to==tgt){
                 par[edg.to]={v, i};
-                return true;
+                return min(curr_flow,edg.w);
             }
             par[edg.to]={v, i};
-            q.push(edg.to);
+            q.push({edg.to, min(curr_flow, edg.w)});
         }
     }
-    return false;
+    return -1;
 }
 
 
@@ -69,8 +69,6 @@ int main(){ _
         int N, M; cin >> N >> M;
         g.clear();
         g.resize(N+1);
-        h.clear();
-        h.resize(N+1);
         for (int i = 0; i < M; i++){
             int u, v, c; cin >> u >> v >> c;
             g[u].pb({v, c, g[v].size()});
@@ -89,15 +87,8 @@ int main(){ _
             int ans=0;
             while (1){
                 memset(vis, false, sizeof vis);
-                if (!bfs(src)) break;
+                if ((gargalo=bfs(src)) == -1) break;
                 int aux_tgt=tgt;
-                gargalo=INT_MAX;
-                while (true){
-                    gargalo=min(gargalo, h[par[aux_tgt].f][par[aux_tgt].s].w);
-                    aux_tgt=par[aux_tgt].f;
-                    if (aux_tgt==src) break;
-                }
-                aux_tgt=tgt;
                 while (true){
                     auto [u, idx] = par[aux_tgt];
                     h[u][idx].w-=gargalo;
