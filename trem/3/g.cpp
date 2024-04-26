@@ -28,32 +28,27 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int main(){ _
     int t; cin >> t;
     while (t--){
+        int idx;
         int n; cin >> n;
         vi v(n); for (int &i: v) cin >> i;
-        int ans=-1;
-        for (int i = 0; i < n; i++){
-            int l = i-1,r=i+1;
-            int val=v[i];
-            if (ans!=-1) break;
-            while (1){
-                if (l<0 and r >= n){
-                    ans=i;
-                    break;
-                }
-                if (l >= 0 and val > v[l]){
-                    l--;
-                    val+=1;
-                    continue;
-                }
-                if (r < n and val > v[r]){
-                    r++;
-                    val+=1;
-                    continue;
-                }
-                break; 
-            } 
+        int eq=1;
+        for (int i = 0; i < n-1; i++) if (v[i]!=v[i+1])eq=0;
+        if (eq) cout << -1 << endl;
+        else {
+            int mx=*max_element(v.begin(), v.end());
+            if (v[0]==mx and v[1] < mx){
+                idx=1;
+            }
+            else if (v[n-1]==mx and v[n-2]<mx){
+                idx=n;
+            }
+            else for (int i = 1; i < n-1; i++){
+               if (v[i]==mx and (v[i-1]<mx or v[i+1]<mx)){
+                idx=i+1;break;
+               } 
+            }
+            cout << idx << endl;
         }
-        cout << (ans == -1 ? ans : ans+1) << endl;
     }    
     exit(0);
 }

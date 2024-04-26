@@ -25,20 +25,35 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
+ll n, a, b;
+vector<ll> v;
+vector<ll> v2;
+
+int can(ll x){
+    v2.clear();v2.assign(v.begin(), v.end());
+   for (ll &i: v2)i=max(0LL, i-b*x); 
+   int cnt=0;
+   for (int i = 0; i < v2.size();i++){
+       cnt += v2[i]/(a-b) + (v2[i]%(a-b) != 0);
+       if (cnt > x) return 0;
+   }
+   return 1;
+}
+
 int main(){ _
-    int n, a, b; cin >> n >> a >> b;
-    int mx=-INF;
-    vi v(n);
-    int idx;
-    for (int i = 0; i < n; i++){
-        cin >> v[i];
-        if (v[i] > mx){
-            mx=v[i];
-            idx=i;
+    cin >> n >> a >> b;
+    v.clear();v.resize(n);
+    for (ll &i:v)cin >> i;
+    ll l=0,r=1e9+10;
+    ll m;
+    while (l < r){
+        m = (l+r)/2;
+        if (can(m)){
+            r=m;
+        } else{
+            l=m+1;
         }
-    }
-    int ans=0;
-     
-        
+    } 
+    cout << l << endl; 
     exit(0);
 }
