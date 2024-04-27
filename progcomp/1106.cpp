@@ -10,6 +10,11 @@ using namespace std;
 #define s second
 #define pb push_back
 #define mp make_pair
+#define bs bitset
+#define umap unordered_map
+#define uset unordered_set
+#define all(v) begin(v), end(v)
+#define rall(v) rbegin(v), rend(v)
 
 #define dbg(x) cout << #x << " = " << x << endl
 
@@ -25,20 +30,21 @@ typedef vector<vd> vdd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int N, I, M, P;
+const int MAX = 615;
+
+int N;
+double p[MAX][MAX];
 
 int main(){ _
-    while (cin >> N >> I >> M >> P){
-        vi custo(M); for (int &i: custo) cin >> i;
-        vi venda(M); for (int &i: venda) cin >> i;
-        vvi dp(N, vi(M));
-        for (int i = 1; i < N; i++){
-            for (int j = I; j < M; j++){
-                if (venda[j] >= custo[j]){
-                   dp[i][j]=venda[j]-custo[j] + dp[i-1][j-1]; 
-                }
+    cout << fixed << setprecision(6);
+    while (1){
+        cin >> N; if (N==0) break;
+        for (int i = 1; i <= N; i++){
+            for (int j = 1; j <= N; i++){
+                cin >> p[i][j];
             }
         }
-    } 
+
+    }   
     exit(0);
 }

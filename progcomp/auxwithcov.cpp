@@ -37,10 +37,10 @@ int src, tgt;
 pii par[MAX];
 int gargalo;
 bool vis[MAX];
-int level[MAX];
-int ptr[MAX];
 vector<vector<Edge>> g;
 vector<vector<Edge>> h;
+queue<tuple<int, int, int>> edges;
+bool cov[MAX][MAX];
 
 bool bfs(int u){
     queue<pii> q;
@@ -73,8 +73,15 @@ int main(){ _
         int N, M; cin >> N >> M;
         g.clear();
         g.resize(N+1);
+        memset(cov, false, sizeof cov);
         for (int i = 0; i < M; i++){
             int u, v, c; cin >> u >> v >> c;
+            edges.push({u,v,c});
+            }
+        while (!edges.empty()){
+            auto [u, v, c] = edges.front();edges.pop();
+            if(cov[u][v]) continue;
+            cov[u][v]=true;cov[v][u]=true;
             g[u].pb({v, c, g[v].size()});
             g[v].pb({u, 0, g[u].size()-1});
 
