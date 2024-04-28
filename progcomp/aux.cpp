@@ -42,25 +42,24 @@ bool vis[MAX];
 int level[MAX];
 vector<vector<Edge>> g;
 vector<pii> aug_path;
-bool found_tgt_bfs;
 int cov[MAX][MAX];
 
 bool bfs(int u){
-    queue<pii> q;
+    queue<int> q;
     q.push(u);
     while (!q.empty()){
         auto v  = q.front();q.pop();
-        if(vis[v] and v!= tgt) continue;
+        if(vis[v] and v != tgt) continue;
         vis[v]=true;
-        allowed[from][v]=1;
         for (int i = 0; i < g[v].size(); i++){
             auto [to, w, rev_idx, is_rev] = g[v][i];
             if (w <= 0) continue;
-            if (to==tgt) found_tgt_bfs=true;
-            q.push({to, v});
+            if (level[to] != -1) continue;
+            level[to]=level[v]+1;
+            q.push(to);
         }
     } 
-    return found_tgt_bfs;
+    return level[tgt] != -1;
 }
 
 void dfs(int u){
@@ -71,11 +70,10 @@ void dfs(int u){
     }
     if (vis[u]) return;
     vis[u]=true;
-
     for (int j = 0; j < g[u].size(); j++){
         if (found_tgt) return;
         auto [v, w, rev_idx, is_rev] = g[u][j];
-        if(!allowed[u][v]) continue;
+        if(level[v]+1 != level[u]) continue;
         if (w<=0) continue;
         int prev=gargalo;
         gargalo=min(gargalo, w);
@@ -111,13 +109,10 @@ void print_g(){
     }
 }
 
-void print_allowed(){
+void print_level(){
     for (int i = 1; i <= N; i++){
-        for (int j = 1; j <= N; j++){    
-            cout << allowed[i][j] << " ";
+            cout << level[i] << " ";
         }
-        cout<< endl;
-    }
     cout << "----------------" << endl;
 }
 
@@ -152,8 +147,7 @@ int main(){
             int ans=0;
             while (1){
                 memset(vis, false, sizeof vis);
-                memset(allowed, 0, sizeof allowed);
-                found_tgt_bfs=false;
+                memset(level , 0, sizeof level);
                 if (!bfs(src)) break;
                 while (1){
                     memset(vis, false, sizeof vis);
