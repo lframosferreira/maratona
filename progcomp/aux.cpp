@@ -31,79 +31,137 @@ struct Edge {
     int to;
     int w;
     int rev_idx;
+    bool is_rev;
 };
 
+int N, M;
 int src, tgt;
-pii par[MAX];
+bool found_tgt;
 int gargalo;
 bool vis[MAX];
-int level[MAX];
-int ptr[MAX];
+int allowed[MAX][MAX];
 vector<vector<Edge>> g;
-vector<vector<Edge>> h;
+vector<pii> aug_path;
+bool found_tgt_bfs;
 
 bool bfs(int u){
     queue<pii> q;
-    q.push({u, INF});
-    vis[u]=true;
+    q.push({u, u});
     while (!q.empty()){
-        auto [v, curr_f]=q.front();q.pop();
-        for (int i = 0; i < h[v].size(); i++){
-            auto edg=h[v][i];
-            if (edg.w <=0) continue;
-            if (vis[edg.to]) continue;
-            vis[edg.to]=true;
-            int new_f=min(edg.w, curr_f);
-            if (edg.to==tgt){
-                par[edg.to]={v, i};
-                gargalo=new_f;
-                return true;
-            }
-            par[edg.to]={v, i};
-            q.push({edg.to, new_f}); 
+        auto [v, from] = q.front();q.pop();
+        if(vis[v] and v!= tgt)continue;
+        vis[v]=true;
+        allowed[from][v]=1;
+        for (int i = 0; i < g[v].size(); i++){
+            auto [to, w, rev_idx, is_rev] = g[v][i];
+            if (vis[to] or w <= 0) continue;
+            if (to==tgt) found_tgt_bfs=true;
+            q.push({to, v});
         }
-    }
-    return false;
+    } 
+    return found_tgt_bfs;
 }
 
+void dfs(int u){
+    if (found_tgt) return;
+    if (u==tgt){
+        found_tgt=true;
+        return;
+    }
+    if (vis[u]) return;
+    vis[u]=true;
 
-int main(){ _
+    for (int j = 0; j < g[u].size(); j++){
+        if (found_tgt) return;
+        auto [v, w, rev_idx, is_rev] = g[u][j];
+        if(!allowed[u][v]) continue;
+        if (w<=0) continue;
+        int prev=gargalo;
+        gargalo=min(gargalo, w);
+        aug_path.pb({u, j});
+        dfs(v);
+        if (!found_tgt){
+            gargalo=prev;
+            aug_path.pop_back();
+        }
+    }
+}
+
+void reset_g(){
+    for (int i = 1; i <= N;i++){
+        for (int j = 0; j < g[i].size(); j++){
+            auto [to, w, rev_idx, is_rev] = g[i][j];
+            if (is_rev){
+                g[to][rev_idx].w+=w;
+                g[i][j].w=0; 
+            }
+        }
+    }
+}
+
+void print_g(){
+    for (int i = 1; i <= N;i++){
+        cout << i <<endl;
+        for (int j = 0; j < g[i].size(); j++){
+            auto [to, w, rev_idx, is_rev] = g[i][j];
+            cout << "to: " << to << " w: " << w << " " << is_rev << endl;
+           }
+        cout << "--------" << endl;
+    }
+}
+
+void print_allowed(){
+    for (int i = 1; i <= N; i++){
+        for (int j = 1; j <= N; j++){    
+            cout << allowed[i][j] << " ";
+        }
+        cout<< endl;
+    }
+    cout << "----------------" << endl;
+}
+
+int main(){ 
     int t; cin >> t;
     while (t--){
-        int N, M; cin >> N >> M;
+        cin >> N >> M;
         g.clear();
         g.resize(N+1);
         for (int i = 0; i < M; i++){
             int u, v, c; cin >> u >> v >> c;
-            g[u].pb({v, c, g[v].size()});
-            g[v].pb({u, 0, g[u].size()-1});
+            g[u].pb({v, c, (int)g[v].size(), false});
+            g[v].pb({u, 0, (int)g[u].size()-1, true});
 
-            g[v].pb({u, c, g[u].size()});
-            g[u].pb({v, 0, g[v].size()-1});
+            g[v].pb({u, c, (int)g[u].size(),false});
+            g[u].pb({v, 0, (int)g[v].size()-1, true});
         }
-        tgt=1; // smp 1
+        src=1; // smp 1
         int resp=INT_MAX;
         for (int k = 2; k <= N; k++){
-            h.clear();
-            h.resize(N+1);
-            for (int i = 1; i <= N; i++) h[i].assign(g[i].begin(), g[i].end()); 
-            src=k;
+            reset_g();
+            tgt=k;
             int ans=0;
             while (1){
+                cout << "*******" << endl;
                 memset(vis, false, sizeof vis);
+                memset(allowed, 0, sizeof allowed);
+                found_tgt_bfs=false;
                 if (!bfs(src)) break;
-                int aux_tgt=tgt;
-                while (true){
-                    auto [u, idx] = par[aux_tgt];
-                    h[u][idx].w-=gargalo;
-                    int rev_idx=h[u][idx].rev_idx;
-                    h[aux_tgt][rev_idx].w+=gargalo;
-                    aux_tgt=u;
-                    if (aux_tgt==src) break;
+                print_allowed();
+                while (1){
+                    memset(vis, false, sizeof vis);
+                    found_tgt=false;
+                    gargalo=INT_MAX;
+                    aug_path.clear();
+                    dfs(src);
+                    if (!found_tgt) break;
+                    for (auto [u, idx]: aug_path){
+                        g[u][idx].w-=gargalo;
+                        g[g[u][idx].to][g[u][idx].rev_idx].w+=gargalo;
+                    }
+                    ans+=gargalo;
                 }
-                ans+=gargalo;
             }
-            resp=min(resp, ans);
+            if (ans!=0) resp=min(resp, ans);
         }
         cout << resp << endl;
     }    
