@@ -35,10 +35,13 @@ int main(){ _
         for (int i = 1; i < N; i++){
             for (int j = I; j < M; j++){
                 if (venda[j] >= custo[j]){
-                   dp[i][j]=venda[j]-custo[j] + dp[i-1][j-1]; 
+                   dp[i][j]=venda[j] + dp[i-1][j-1]; 
+                }else {
+                    dp[i][j]=dp[i-1][j] + custo[j];
                 }
             }
         }
+        cout << dp[N][M] <<endl;
     } 
     exit(0);
 }

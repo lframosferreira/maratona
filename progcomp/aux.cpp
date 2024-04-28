@@ -39,22 +39,23 @@ int src, tgt;
 bool found_tgt;
 int gargalo;
 bool vis[MAX];
-int allowed[MAX][MAX];
+int level[MAX];
 vector<vector<Edge>> g;
 vector<pii> aug_path;
 bool found_tgt_bfs;
+int cov[MAX][MAX];
 
 bool bfs(int u){
     queue<pii> q;
-    q.push({u, u});
+    q.push(u);
     while (!q.empty()){
-        auto [v, from] = q.front();q.pop();
-        if(vis[v] and v!= tgt)continue;
+        auto v  = q.front();q.pop();
+        if(vis[v] and v!= tgt) continue;
         vis[v]=true;
         allowed[from][v]=1;
         for (int i = 0; i < g[v].size(); i++){
             auto [to, w, rev_idx, is_rev] = g[v][i];
-            if (vis[to] or w <= 0) continue;
+            if (w <= 0) continue;
             if (to==tgt) found_tgt_bfs=true;
             q.push({to, v});
         }
@@ -120,33 +121,40 @@ void print_allowed(){
     cout << "----------------" << endl;
 }
 
+stack<tuple<int, int, int>> edges;
+
 int main(){ 
     int t; cin >> t;
     while (t--){
         cin >> N >> M;
         g.clear();
         g.resize(N+1);
+        memset(cov, 0, sizeof cov);
         for (int i = 0; i < M; i++){
             int u, v, c; cin >> u >> v >> c;
+            edges.push({u,v,c});
+        }
+        while (!edges.empty()){
+            auto [u, v, c] = edges.top();edges.pop();
+            if(cov[u][v] or cov[v][u]) continue;
+            cov[u][v]=1;cov[v][u]=1;
             g[u].pb({v, c, (int)g[v].size(), false});
             g[v].pb({u, 0, (int)g[u].size()-1, true});
 
-            g[v].pb({u, c, (int)g[u].size(),false});
-            g[u].pb({v, 0, (int)g[v].size()-1, true});
+            g[v].pb({u, c, (int)g[u].size(), false});
+            g[u].pb({v, 0,(int)g[v].size()-1, true});
         }
-        src=1; // smp 1
+        tgt=1; // smp 1
         int resp=INT_MAX;
         for (int k = 2; k <= N; k++){
             reset_g();
-            tgt=k;
+            src=k;
             int ans=0;
             while (1){
-                cout << "*******" << endl;
                 memset(vis, false, sizeof vis);
                 memset(allowed, 0, sizeof allowed);
                 found_tgt_bfs=false;
                 if (!bfs(src)) break;
-                print_allowed();
                 while (1){
                     memset(vis, false, sizeof vis);
                     found_tgt=false;
