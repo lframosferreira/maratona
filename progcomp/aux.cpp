@@ -38,28 +38,27 @@ int N, M;
 int src, tgt;
 bool found_tgt;
 int gargalo;
-bool vis[MAX];
-int level[MAX];
 vector<vector<Edge>> g;
 vector<pii> aug_path;
 int cov[MAX][MAX];
+int U;
+int level[MAX];
 
 bool bfs(int u){
+    for (int i = 1; i <= N; i++) level[i]=-1;
+    level[src]=0;
     queue<int> q;
     q.push(u);
     while (!q.empty()){
-        auto v  = q.front();q.pop();
-        if(vis[v] and v != tgt) continue;
-        vis[v]=true;
+        auto v = q.front();q.pop();
         for (int i = 0; i < g[v].size(); i++){
             auto [to, w, rev_idx, is_rev] = g[v][i];
-            if (w <= 0) continue;
-            if (level[to] != -1) continue;
+            if (level[to]!=-1 or w < U) continue;
             level[to]=level[v]+1;
             q.push(to);
         }
     } 
-    return level[tgt] != -1;
+    return level[tgt]!=-1;
 }
 
 void dfs(int u){
@@ -68,12 +67,10 @@ void dfs(int u){
         found_tgt=true;
         return;
     }
-    if (vis[u]) return;
-    vis[u]=true;
     for (int j = 0; j < g[u].size(); j++){
         if (found_tgt) return;
         auto [v, w, rev_idx, is_rev] = g[u][j];
-        if(level[v]+1 != level[u]) continue;
+        if (level[v]!=level[u]+1) continue;
         if (w<=0) continue;
         int prev=gargalo;
         gargalo=min(gargalo, w);
@@ -111,9 +108,9 @@ void print_g(){
 
 void print_level(){
     for (int i = 1; i <= N; i++){
-            cout << level[i] << " ";
-        }
-    cout << "----------------" << endl;
+        cout << level[i] << " ";
+    }
+    cout << "\n----------------" << endl;
 }
 
 stack<tuple<int, int, int>> edges;
@@ -125,10 +122,19 @@ int main(){
         g.clear();
         g.resize(N+1);
         memset(cov, 0, sizeof cov);
+        U=-INF;
         for (int i = 0; i < M; i++){
             int u, v, c; cin >> u >> v >> c;
+            U=max(U, c);
             edges.push({u,v,c});
         }
+        U|=U>>1;
+        U|=U>>2;
+        U|=U>>4;
+        U|=U>>8;
+        U|=U>>16;
+        U = U ^ (U>>1);
+        int lim=U;
         while (!edges.empty()){
             auto [u, v, c] = edges.top();edges.pop();
             if(cov[u][v] or cov[v][u]) continue;
@@ -139,28 +145,27 @@ int main(){
             g[v].pb({u, c, (int)g[u].size(), false});
             g[u].pb({v, 0,(int)g[v].size()-1, true});
         }
-        tgt=1; // smp 1
+        src=1; // smp 1
         int resp=INT_MAX;
         for (int k = 2; k <= N; k++){
             reset_g();
-            src=k;
+            tgt=k;
             int ans=0;
-            while (1){
-                memset(vis, false, sizeof vis);
-                memset(level , 0, sizeof level);
-                if (!bfs(src)) break;
+            for (U=lim;U;U>>=1){
                 while (1){
-                    memset(vis, false, sizeof vis);
-                    found_tgt=false;
-                    gargalo=INT_MAX;
-                    aug_path.clear();
-                    dfs(src);
-                    if (!found_tgt) break;
-                    for (auto [u, idx]: aug_path){
-                        g[u][idx].w-=gargalo;
-                        g[g[u][idx].to][g[u][idx].rev_idx].w+=gargalo;
+                    if (!bfs(src)) break;
+                    while (1){
+                        found_tgt=false;
+                        gargalo=INT_MAX;
+                        aug_path.clear();
+                        dfs(src);
+                        if (!found_tgt) break;
+                        for (auto [u, idx]: aug_path){
+                            g[u][idx].w-=gargalo;
+                            g[g[u][idx].to][g[u][idx].rev_idx].w+=gargalo;
+                        }
+                        ans+=gargalo;
                     }
-                    ans+=gargalo;
                 }
             }
             if (ans!=0) resp=min(resp, ans);
