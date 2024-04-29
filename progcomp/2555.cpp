@@ -19,13 +19,15 @@ typedef pair<ll, ll> pll;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 typedef vector<ll> vll;
+typedef vector<double> vd;
+typedef vector<vd> vvd;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int N, K;
 
-void printdp(vector<vector<double>> &v){
+void printdp(vvd &v){
     for (int i = 0; i <= N; i++){
         for (int j = 0; j <= K; j++){
             cout << v[i][j] << " ";
@@ -42,22 +44,22 @@ int main(){ _
         for (int i = 1; i <= N; i++) cin >> premios[i];
         vi chance(N+1);
         for (int i = 1; i <= N; i++) cin >> chance[i];
-        vector<vector<double>> dp(N+1, vector<double>(K+1));
-        vector<vector<double>> acumulada(N+1, vector<double>(K+1));
+        vvd dp(N+1, vd(K+1));
+        vvd acumulada(N+1, vd(K+1));
         for (int i = 0; i <= K; i++){
             dp[N][i] = i > 0 ? (double)premios[N] : (double)premios[N]*((double)chance[N]/100.0);
             acumulada[N][i] = i > 0 ? 1.0 : (double)chance[N]/100.0;
         }
         for (int i = N-1; i >= 0; i--){
             for (int j = K-1; j >= 0; j--){
-                double x = dp[i+1][j+1] + (double)premios[i]*acumulada[i+1][j+1];
-                double y = ((double) chance[i]/100.0)*dp[i+1][j]+ (double)premios[i]*((double)chance[i]/100.0)*acumulada[i+1][j];
+                double x = dp[i+1][j] + (double)premios[i]*acumulada[i+1][j];
+                double y = ((double) chance[i]/100.0)*dp[i+1][j+1]+ (double)premios[i]*((double)chance[i]/100.0)*acumulada[i+1][j+1];
                 if (y >= x){
                     dp[i][j] = y;
-                    acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i+1][j];
+                    acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i+1][j+1];
                 }else {
                     dp[i][j]=x;
-                    acumulada[i][j] = acumulada[i+1][j+1];
+                    acumulada[i][j] = acumulada[i+1][j];
                 }
             }
         }
