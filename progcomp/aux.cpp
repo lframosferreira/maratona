@@ -36,10 +36,8 @@ struct Edge {
 
 int N, M;
 int src, tgt;
-bool found_tgt;
 int gargalo;
 vector<vector<Edge>> g;
-vector<pii> aug_path;
 int cov[MAX][MAX];
 int U;
 vi level;
@@ -61,27 +59,19 @@ bool bfs(int u){
     return level[tgt]!=-1;
 }
 
-vector<pii> par;
-bool bfs2(int u){
-    par=vector<pii>(g.size()+1, {-1, -1});
-    queue<int> q;
-    q.push(u);
-    while (!q.empty()){
-        auto v=q.front();q.pop();
-        for (int i = 0; i < g[v].size(); i++){
-            auto edg=g[v][i];
-            if (level[edg.to]!=level[v]+1) continue;
-            if (edg.w <=0) continue;
-            if (edg.to==tgt){
-                par[edg.to]={v, i};
-                return true;
-            }
-            par[edg.to]={v, i};
-            q.push(edg.to);
-        }
-    }
-    return false;
-}
+int dfs(int v, int f = INF) {
+		if (!f or v == tgt) return f;
+		for (int i = 0; i < g[v].size(); i++) {
+			auto& e = g[v][i];
+			if (level[e.to] != level[v] + 1) continue;
+			int foi = dfs(e.to, min(f, e.w));
+			if (!foi) continue;
+			e.w -= foi, g[e.to][e.rev_idx].w += foi;
+			return foi;
+		}
+		return 0;
+	}
+
 
 void reset_g(){
     for (int i = 1; i <= N;i++){
@@ -148,30 +138,14 @@ int main(){
         src=1; // smp 1
         int resp=INT_MAX;
         for (int k = 2; k <= N; k++){
-            if (k!=2) reset_g();
             tgt=k;
             int ans=0;
             for (U=lim;U;U>>=1){
                 while (1){
                     if (!bfs(src)) break;
                     while (1){
-                        if (!bfs2(src)) break;
-                        int aux_tgt=tgt;
-                        gargalo=INT_MAX;
-                        while (true){
-                            gargalo=min(gargalo, g[par[aux_tgt].f][par[aux_tgt].s].w);
-                            aux_tgt=par[aux_tgt].f;
-                            if (aux_tgt==src) break;
-                        }
-                        aux_tgt=tgt;
-                        while (true){
-                            auto [u, idx] = par[aux_tgt];
-                            g[u][idx].w-=gargalo;
-                            int rev_idx=g[u][idx].rev_idx;
-                            g[aux_tgt][rev_idx].w+=gargalo;
-                            aux_tgt=u;
-                            if (aux_tgt==src) break;
-                        }
+                        gargalo = dfs(src);
+                        if (gargalo==0) break;
                         ans+=gargalo;
                     }
                 }
