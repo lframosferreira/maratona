@@ -31,6 +31,15 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
-    
+    int n; cin >> n;
+    vector<tuple<int, int, int>> v(n);
+    int cnt=0;
+    for (auto& [a, b, c] : v) {cin >> a >> b;c=cnt;cnt++;}
+    sort(v.begin(), v.end());    
+    for (int i = 0; i < 3; i++){
+        auto [a, b, c] = v[i];
+        cout << c+1 << " ";
+    }
+    cout << endl;
     exit(0);
 }

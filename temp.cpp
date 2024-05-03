@@ -6,9 +6,11 @@ using namespace std;
 
 #define _ ios_base::sync_with_stdio(0);cin.tie(0);
 #define endl '\n'
+#define sz(v) (int)v.size()
 #define f first
 #define s second
 #define pb push_back
+#define eb emplace_back
 #define mp make_pair
 #define bs bitset
 #define umap unordered_map
@@ -19,11 +21,12 @@ using namespace std;
 #define dbg(x) cout << #x << " = " << x << endl
 
 typedef long long ll;
-typedef pair<int , int> pii;
-typedef pair<ll, ll> pll;
+typedef pair<int , int> ii;
+typedef tuple<int, int, int> iii;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 typedef vector<ll> vll;
+typedef vector<vll> vvll;
 typedef vector<double> vd;
 typedef vector<vd> vdd;
 
