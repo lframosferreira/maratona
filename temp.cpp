@@ -28,7 +28,7 @@ typedef vector<vi> vvi;
 typedef vector<ll> vll;
 typedef vector<vll> vvll;
 typedef vector<double> vd;
-typedef vector<vd> vdd;
+typedef vector<vd> vvd;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
