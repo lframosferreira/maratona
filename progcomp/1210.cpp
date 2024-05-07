@@ -29,19 +29,24 @@ int N, I, M, P;
 
 int main(){ _
     while (cin >> N >> I >> M >> P){
-        vi custo(M); for (int &i: custo) cin >> i;
-        vi venda(M); for (int &i: venda) cin >> i;
-        vvi dp(N, vi(M));
-        for (int i = 1; i < N; i++){
-            for (int j = I; j < M; j++){
-                if (venda[j] >= custo[j]){
-                   dp[i][j]=venda[j] + dp[i-1][j-1]; 
+        vi custo(M+1); for (int i = 1 ; i <= M; i++) cin >> custo[i];
+        vi venda(M+1); for (int i = 1; i <= M; i++) cin >> venda[i];
+        vvi dp(N+1, vi(M+1));
+        for (int i = 1; i <= N; i++){
+            for (int j = 1; j <= M; j++){
+                if (dp[i][j-1] - venda[j] + custo[1] <= dp[i][j-1] + custo[j]){
+                    dp[i][j]=dp[i][j-1] - venda[j] + custo[1]; 
                 }else {
                     dp[i][j]=dp[i-1][j] + custo[j];
                 }
             }
         }
-        cout << dp[N][M] <<endl;
+        for (int i = 1; i <= N; i++){
+            for (int j = 1; j <= M; j++){
+                cout << dp[i][j] << " ";
+            }
+            cout << endl;
+        }
     } 
     exit(0);
 }

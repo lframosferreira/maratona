@@ -37,26 +37,28 @@ void printdp(vvd &v){
     cout << "-----"<< endl;
 }
 
+// dp[i][j] -> valor esperado no final se nas i primeiras perguntas usei j pulos
+
 int main(){ _
     cout << fixed << setprecision(2);
     while (cin >> N >> K){
-        vi premios(N+1);
+        vd premios(N+1);
         for (int i = 1; i <= N; i++) cin >> premios[i];
-        vi chance(N+1);
+        vd chance(N+1);
         for (int i = 1; i <= N; i++) cin >> chance[i];
         vvd dp(N+1, vd(K+1));
-        vvd acumulada(N+1, vd(K+1));
+        vvd acumulada(N+1, vd(K+1, 1.0));
         for (int i = 0; i <= K; i++){
-            dp[N][i] = i > 0 ? (double)premios[N] : (double)premios[N]*((double)chance[N]/100.0);
-            acumulada[N][i] = i > 0 ? 1.0 : (double)chance[N]/100.0;
+            dp[N][i] = i > 0 ? premios[N] : premios[N]*(chance[N]/100.0);
+            acumulada[N][i] = i > 0 ? 1.0 : chance[N]/100.0;
         }
         for (int i = N-1; i >= 0; i--){
             for (int j = K-1; j >= 0; j--){
-                double x = dp[i+1][j] + (double)premios[i]*acumulada[i+1][j];
-                double y = ((double) chance[i]/100.0)*dp[i+1][j+1]+ (double)premios[i]*((double)chance[i]/100.0)*acumulada[i+1][j+1];
+                double x = dp[i+1][j] + premios[i]*acumulada[i+1][j];
+                double y = (chance[i]/100.0)*dp[i+1][j+1]+ premios[i]*(chance[i]/100.0)*acumulada[i+1][j+1];
                 if (y >= x){
                     dp[i][j] = y;
-                    acumulada[i][j] = ((double)chance[i] / 100.0) *acumulada[i+1][j+1];
+                    acumulada[i][j] = (chance[i] / 100.0) *acumulada[i+1][j+1];
                 }else {
                     dp[i][j]=x;
                     acumulada[i][j] = acumulada[i+1][j];

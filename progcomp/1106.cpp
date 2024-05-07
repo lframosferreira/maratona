@@ -6,9 +6,11 @@ using namespace std;
 
 #define _ ios_base::sync_with_stdio(0);cin.tie(0);
 #define endl '\n'
+#define sz(v) (int)v.size()
 #define f first
 #define s second
 #define pb push_back
+#define eb emplace_back
 #define mp make_pair
 #define bs bitset
 #define umap unordered_map
@@ -19,32 +21,36 @@ using namespace std;
 #define dbg(x) cout << #x << " = " << x << endl
 
 typedef long long ll;
-typedef pair<int , int> pii;
-typedef pair<ll, ll> pll;
+typedef pair<int , int> ii;
+typedef tuple<int, int, int> iii;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
 typedef vector<ll> vll;
+typedef vector<vll> vvll;
 typedef vector<double> vd;
-typedef vector<vd> vdd;
+typedef vector<vd> vvd;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 615;
-
 int N;
-double p[MAX][MAX];
+vector<ii> races;
 
 int main(){ _
-    cout << fixed << setprecision(6);
-    while (1){
-        cin >> N; if (N==0) break;
+    for (;;){
+        cin >> N;
+        if (N==0) break;
+        races.clear();
+        vvd v(N+1, vd(M+1));
         for (int i = 1; i <= N; i++){
-            for (int j = 1; j <= N; i++){
-                cin >> p[i][j];
+            for (int j = 1; j <= M; j++){
+                cin >> v[i][j];
             }
         }
-
-    }   
+        for (int i = 0; i < N-1; i++){
+            int a, b; cin >> a >> b;
+            races.pb(mp(a, b));
+        }
+    } 
     exit(0);
 }
