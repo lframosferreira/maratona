@@ -37,7 +37,7 @@ void printdp(vvd &v){
     cout << "-----"<< endl;
 }
 
-// dp[i][j] -> valor esperado no final se nas i primeiras perguntas usei j pulos
+// dp[i][j] -> valor esperado no final na pergunta i ainda tenho j pulos
 
 int main(){ _
     cout << fixed << setprecision(2);
@@ -52,22 +52,27 @@ int main(){ _
             dp[N][i] = i > 0 ? premios[N] : premios[N]*(chance[N]/100.0);
             acumulada[N][i] = i > 0 ? 1.0 : chance[N]/100.0;
         }
+        dp[N][0]=premios[N] * (chance[N]/100.0);
+        acumulada[N][0] = chance[N]/100.0;
         for (int i = N-1; i >= 0; i--){
-            for (int j = K-1; j >= 0; j--){
-                double x = dp[i+1][j] + premios[i]*acumulada[i+1][j];
-                double y = (chance[i]/100.0)*dp[i+1][j+1]+ premios[i]*(chance[i]/100.0)*acumulada[i+1][j+1];
+            dp[i][0]=(premios[i] + dp[i+1][0])*(chance[i]/100.0);
+            acumulada[i][0]=acumulada[i+1][0] * (premios[i]/100.0);
+        }
+        for (int i = N-1; i >= 1; i--){
+            for (int j = K; j >= 1; j--){
+                double x = dp[i+1][j-1] + premios[i];
+                double y = (chance[i]/100.0)*dp[i+1][j] + premios[i]*(chance[i]/100.0);
                 if (y >= x){
                     dp[i][j] = y;
-                    acumulada[i][j] = (chance[i] / 100.0) *acumulada[i+1][j+1];
+                    acumulada[i][j] = (chance[i] / 100.0) *acumulada[i+1][j];
                 }else {
                     dp[i][j]=x;
-                    acumulada[i][j] = acumulada[i+1][j];
+                    acumulada[i][j] = acumulada[i+1][j-1];
                 }
             }
         }
-        printdp(dp);
-        
-        printdp(acumulada);
+        cout << dp[1][K] << endl; 
     }
     exit(0);
 }
+

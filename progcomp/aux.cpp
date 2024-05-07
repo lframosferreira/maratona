@@ -105,7 +105,7 @@ void print_level(){
 
 stack<tuple<int, int, int>> edges;
 
-int main(){ 
+int main(){ _
     int t; cin >> t;
     while (t--){
         cin >> N >> M;
@@ -138,7 +138,6 @@ int main(){
         src=1; // smp 1
         int resp=INT_MAX;
         for (int k = 2; k <= N; k++){
-            reset_g();
             tgt=k;
             int ans=0;
             for (U=lim;U;U>>=1){
