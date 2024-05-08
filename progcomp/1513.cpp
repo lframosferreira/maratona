@@ -47,6 +47,7 @@ vector<ii> moves = {
 int dp[105][105][18];
 char board[105][105];
 vector<ii> p;
+int g[21][21];
 
 int main(){ _
     while (1){
@@ -74,8 +75,9 @@ int main(){ _
             // condicao de parada
 
             for (auto [a, b] : moves){
-                if (oob(x+a, y+b)) continue;
-                 
+                if (oob(x+a, y+b) or board[x+a][y+b]=='#') continue;
+
+                       
             }
         }
 
