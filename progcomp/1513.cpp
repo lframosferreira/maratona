@@ -56,7 +56,6 @@ int main(){
         memset(dp, INF, sizeof dp);
         memset(board, 0, sizeof board);
         memset(g, INF, sizeof g);
-        string str;
         ii h_pos;
         int cnt_peoes=0;
         for (int i = 0; i < N; i++){
@@ -79,10 +78,10 @@ int main(){
                 auto [x, y] = coo;
                 // condicao de parada
                 if (board[x][y]=='P') {
-                    int peao_x=peoes_coo[peoes_idx[mp(x, y)]].f;
-                    int peao_y=peoes_coo[peoes_idx[mp(x, y)]].s;
-                    if (g[peao_x][peao_y]!=INF) continue;
-                    g[peao_x][peao_y]=d;
+                    int peao_atual=peoes_idx[mp(x, y)];
+                    if (g[p][peao_atual]!=INF) continue;
+                    g[peao_atual][p]=d;
+                    g[p][peao_atual]=d;
                 }
                 for (auto [a, b] : moves){
                     if (oob(x+a, y+b) or board[x+a][y+b]=='#') continue;
