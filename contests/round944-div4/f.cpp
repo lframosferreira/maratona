@@ -33,40 +33,18 @@ typedef vector<vd> vvd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 4e5+5;
-
-int divi[MAX];
-vi primos;
-
-void sieve(){
-    for (int i=1;i <MAX;i++) divi[i]=1;
-    for (int i = 2; i<MAX; i++){
-        if (divi[i]==1){
-            primos.pb(i);
-            for (ll j = (ll)i*i; j< MAX; j+=i) {
-                divi[j]=i;
-            }
-        }
-    }
-}
 
 int main(){ _
-    sieve();
-    int n;
-    while (1){
-        cin >> n;
-        if (n==0) break;
-        list<int> l(n);
-        iota(all(l), 1);
-        int pos=-1;
-        for (auto idx: primos){
-            if (sz(l) ==1)break;
-            pos=(pos+idx)%sz(l);
-            l.erase(next(l.begin(),pos)); 
-            pos--;
-        } 
-        
-        cout << *l.begin() << endl;
-    } 
+    int t; cin >> t;
+    while (t--){
+        int r; cin >> r;
+        if (r==1) cout << 8 << endl;
+        else{
+            ll ans = 0;
+            ans=(2*r+1)*(2*r+1) - (2*(r-1)+1)*(2*(r-1)+1); 
+            if ((r*r+r*r) > (r+1)*(r+1) ) ans-=4;
+            cout << ans << endl;
+        }        
+    }    
     exit(0);
 }

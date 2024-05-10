@@ -33,40 +33,29 @@ typedef vector<vd> vvd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const int MAX = 4e5+5;
-
-int divi[MAX];
-vi primos;
-
-void sieve(){
-    for (int i=1;i <MAX;i++) divi[i]=1;
-    for (int i = 2; i<MAX; i++){
-        if (divi[i]==1){
-            primos.pb(i);
-            for (ll j = (ll)i*i; j< MAX; j+=i) {
-                divi[j]=i;
+int main(){ 
+    int t; cin >> t;
+    while (t--){
+        int n, k, q; cin >> n >> k >> q;
+        vll a(k+1), b(k+1);
+        for (int i = 1; i <= k; i++) cin >> a[i];
+        for (int i = 1; i <= k; i++) cin >> b[i];
+        while (q--){
+            int d; cin >> d;
+            if (d==0){
+                cout << 0 << " ";
+                continue;
             }
+            if (d==n){
+                cout << b[k] <<  " ";
+                continue;
+            }
+            int p = distance(a.begin(), upper_bound(all(a), d));
+            ll dist = a[p]-a[p-1];
+            ll time = b[p]-b[p-1];
+            cout << b[p-1] + ((d - a[p-1])*(time))/dist  << " ";
         }
-    }
-}
-
-int main(){ _
-    sieve();
-    int n;
-    while (1){
-        cin >> n;
-        if (n==0) break;
-        list<int> l(n);
-        iota(all(l), 1);
-        int pos=-1;
-        for (auto idx: primos){
-            if (sz(l) ==1)break;
-            pos=(pos+idx)%sz(l);
-            l.erase(next(l.begin(),pos)); 
-            pos--;
-        } 
-        
-        cout << *l.begin() << endl;
-    } 
+        cout << endl;
+    }    
     exit(0);
 }
