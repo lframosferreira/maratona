@@ -36,6 +36,7 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int N, M, K;
 int dp[21][1 << 17];
 char board[105][105];
+bool vis[105][105];
 int g[21][21];
 map<ii, int> peoes_idx;
 ii peoes_coo[21];
@@ -57,11 +58,15 @@ int main(){
         memset(board, 0, sizeof board);
         memset(g, INF, sizeof g);
         ii h_pos;
-        int cnt_peoes=0;
+        int cnt_peoes=1;
         for (int i = 0; i < N; i++){
             for (int j = 0; j < M;j++){
                 cin >> board[i][j];
-                if (board[i][j]=='C') h_pos=mp(i, j);
+                if (board[i][j]=='C') {
+                    h_pos=mp(i, j);
+                    peoes_idx[mp(i,j)]=0;
+                    peoes_coo[0]=mp(i,j);
+                }
                 if (board[i][j]=='P') {
                     peoes_idx[mp(i,j)]=cnt_peoes;
                     peoes_coo[cnt_peoes]=mp(i,j);
@@ -70,16 +75,18 @@ int main(){
             }
         }
         // usar bfs para construir grafo a partir de todo peao p achar menores caminhos
-        for (int p = 0; p < cnt_peoes; p++){
+        for (int p = 0; p <= cnt_peoes; p++){
+            memset(vis, false, sizeof vis);
             queue<pair<ii, int>> q;
             q.push({peoes_coo[p], 0});
             while (sz(q)){
                 auto [coo, d] = q.front();q.pop();
                 auto [x, y] = coo;
+                if (vis[x][y]) continue;
+                vis[x][y]=true;
                 // condicao de parada
-                if (board[x][y]=='P') {
+                if (board[x][y]=='P' or board[x][y]=='C') {
                     int peao_atual=peoes_idx[mp(x, y)];
-                    if (g[p][peao_atual]!=INF) continue;
                     g[peao_atual][p]=d;
                     g[p][peao_atual]=d;
                 }
@@ -89,12 +96,11 @@ int main(){
                 }
             }
         }
-        for (int i = 0; i <cnt_peoes;i++){
-            for (int j = 0;j < cnt_peoes;j++){
-                cout << g[i][j] << " ";
-            }
-            cout << endl;
-        }
+
+        // rodar tsp com dp
+        // salvar caso base em que é so aresta
+        // iterar
+
     } 
     exit(0);
 }
