@@ -34,7 +34,7 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int N, M, K;
-int dp[21][1 << 17];
+int dp[1 << 17][21];
 char board[105][105];
 bool vis[105][105];
 int g[21][21];
@@ -54,7 +54,6 @@ int main(){
     while (1){
         cin >> N >> M >> K;
         if (N==0 and M==0 and K==0) break;
-        memset(dp, INF, sizeof dp);
         memset(board, 0, sizeof board);
         memset(g, INF, sizeof g);
         ii h_pos;
@@ -100,7 +99,28 @@ int main(){
         // rodar tsp com dp
         // salvar caso base em que é so aresta
         // iterar
+        memset(dp, INF, sizeof dp);
 
+        // dp[i][j] -> caminho com os vertices do sbconj i que termina em j
+        dp[1][0]=0;
+
+        for (int mask = 1; mask < (1 << cnt_peoes); mask++) {
+            for (int u = 0; u < cnt_peoes; u++) {
+                if (mask & (1 << u)) {
+                    for (int v = 0; v < cnt_peoes; v++) {
+                        if (!(mask & (1 << v)) && u != v) {
+                            dp[mask | (1 << v)][v] = min(dp[mask | (1 << v)][v], dp[mask][u] + g[u][v]);
+                        }
+                    }
+                }
+            }
+        }
+
+        int ans=INF;
+        for (int i = 0; i < cnt_peoes; i++) {
+            ans = min(ans, dp[(1 << cnt_peoes) - 1][i] + g[i][0]);
+        }
+        cout << ans <<endl;
     } 
     exit(0);
 }
