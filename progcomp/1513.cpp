@@ -101,26 +101,28 @@ int main(){
         // iterar
         memset(dp, INF, sizeof dp);
 
+        // 0 é o índice do cavalo
         // dp[i][j] -> caminho com os vertices do sbconj i que termina em j
         dp[1][0]=0;
 
         for (int mask = 1; mask < (1 << cnt_peoes); mask++) {
             for (int u = 0; u < cnt_peoes; u++) {
-                if (mask & (1 << u)) {
-                    for (int v = 0; v < cnt_peoes; v++) {
-                        if (!(mask & (1 << v)) && u != v) {
-                            dp[mask | (1 << v)][v] = min(dp[mask | (1 << v)][v], dp[mask][u] + g[u][v]);
-                        }
-                    }
+                if (!(mask & (1 << u))) continue;
+                for (int v = 0; v < cnt_peoes; v++) {
+                    if (u==v) continue;
+                    if (mask & (1 << v)) continue;
+                    int new_subset = mask | (1 << v);
+                    dp[new_subset][v] = min(dp[new_subset][v], dp[mask][u] + g[u][v]);
                 }
             }
         }
 
         int ans=INF;
-        for (int i = 0; i < cnt_peoes; i++) {
-            ans = min(ans, dp[(1 << cnt_peoes) - 1][i] + g[i][0]);
+        // menor distancia de final ate inicio somada com dp
+        for (int peao = 0; peao < cnt_peoes; peao++) {
+            ans = min(ans, dp[(1 << cnt_peoes) - 1][peao] + g[peao][0]);
         }
-        cout << ans <<endl;
+        cout << ans << endl;
     } 
     exit(0);
 }
