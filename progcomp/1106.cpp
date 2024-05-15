@@ -37,6 +37,7 @@ int N;
 vector<ii> races;
 
 int main(){ _
+    cout << fixed << setprecision(6);
     for (;;){
         cin >> N;
         if (N==0) break;
