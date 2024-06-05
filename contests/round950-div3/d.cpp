@@ -34,7 +34,8 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 vi g;
-int ok(int l, int r){
+int ok(vi &v){
+    for (int i = 0; i < sz(v)-1; i++)if (v[i] > v[i+1]) return 0;
     return 1;
 }
 
@@ -45,11 +46,10 @@ int main(){ _
         int n; cin >> n;
         vi v(n); for (int &i: v) cin >> i;
         for (int i = 0; i < n-1; i++) g.pb(__gcd(v[i], v[i+1]));
-        if (ok(0, sz(g)-1)){
-            cout << "YES" << endl;
-            continue; 
-        } 
-
+        for (int i = 0; i < n; i++){
+            vi aux = v;
+            v.erase(v.begin()+i);
+        }
     }    
     exit(0);
 }
