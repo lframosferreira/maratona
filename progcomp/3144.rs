@@ -1,10 +1,14 @@
 use std::io;
 
-#[derive(Ord, Eq)]
+#[derive(PartialOrd, PartialEq, Ord, Eq)]
 struct Edge {
     w: i32,
     u: i32,
     v: i32,
+}
+
+fn find(u: i32, &id: Vec<i32>) -> i32 {
+   id[u] = u if id[u] == u else find(id[u], id); 
 }
 
 fn main() {
@@ -15,6 +19,8 @@ fn main() {
     let M: i32 = iter.next().unwrap().parse().unwrap();
     io::stdin().read_line(&mut input);
     let mut edges: Vec<Edge> = Vec::new();
+    let mut sz = vec![1, N+1];
+    let mut id: Vec<i32> = (1..=N+1).collect();
     for _ in 0..M {
         io::stdin().read_line(&mut input);
         iter = input.split_whitespace();
@@ -24,4 +30,5 @@ fn main() {
         edges.push(Edge { w, u, v });
     }
     edges.sort();
+    
 }
