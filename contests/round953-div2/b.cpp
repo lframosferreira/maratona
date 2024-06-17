@@ -32,17 +32,18 @@ typedef vector<vd> vvd;
 
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
+ll a, b, n;
+
+ll f(ll k){
+    return k*(b+1)-k*a+n*a-(((k+1)*k)/2);
+}
 
 int main(){ _
     int t; cin >> t;
     while (t--){
-        ll a, b, n; cin >> n >>a >> b;
-        ll ans=-LINF;
-        for (int k = 0;k<=min(b, n);k++ )
-        {
-            ll val = k*(b+1)- ((k*(k+1))/2) + n*a -k*a;
-            ans=max(ans, val);
-        }
+        cin >> n >>a >> b;
+        if (a>=b) cout << f(0) <<endl;
+        else cout << f(b-a) <<endl;
     }
     exit(0);
 }
