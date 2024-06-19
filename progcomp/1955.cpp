@@ -35,13 +35,34 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 const int MAX = 1e3+5;
 vector<int> g[MAX];
+int c[MAX];
+int ok;
+
+void dfs(int u, int color){
+    if (c[u]) return;
+    c[u]=color;
+    for(auto v: g[u]){
+        if (c[v] and c[v]==color){
+            ok=false;
+        }else if (c[v])continue;
+        dfs(v, color==1?2:1);
+    }
+}
 
 int main(){ _
     int n; cin >> n;
+    ok=true;
+    memset(c, 0,sizeof c);
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
-           int k; cin >> k;
+            int k; cin >> k;
+            if (k) continue;
+            g[i].pb(j);
+            g[j].pb(i);
         }
     }
+    dfs(1, 1);
+    if (ok) cout << "Bazinga!" << endl;
+    else cout << "Fail!"<<endl;
     exit(0);
 }
