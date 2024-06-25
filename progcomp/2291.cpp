@@ -54,7 +54,7 @@ int main(){ _
     d[3]=4;
     for (ull i = 4; i < MAX; i++){
         if (divi[i]==i) d[i]=i+1;
-        else d[i] = d[i/divi[i]] + i;
+        else d[i] = d[i/divi[i]] + i + ((i/divi[i])%divi[i]==0?0:i/divi[i]);
     }
     for (ull i = 2; i < MAX; i++) d[i]+=d[i-1];
     while (true){
