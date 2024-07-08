@@ -21,7 +21,6 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
- // copied from cp algorithms
 int gcd_extended(int a, int b, int& x, int& y) {
     x = 1, y = 0;
     int x1 = 0, y1 = 1, a1 = a, b1 = b;
@@ -34,8 +33,7 @@ int gcd_extended(int a, int b, int& x, int& y) {
     return a1;
 }
 
-//also copied from cp algorithms
-ll binpow(ll a, ll b, ll mod){
+ll fexp(ll a, ll b, ll mod){
     a %= mod;
     ll res = 1;
     while (b>0){
@@ -50,10 +48,9 @@ ll binpow(ll a, ll b, ll mod){
 int main(){ _
     int N, E, C; cin >> N >> E >> C; 
     
-    // trial divison to find P and Q 
     int P, Q;
     for (int i = 2; i*i <= N; i++){
-        if ( N % i == 0){
+        if (N % i == 0){
             P = i;
             Q = N/i;
             break;
@@ -62,11 +59,10 @@ int main(){ _
     
     int phi = (P-1)*(Q-1);
 
-    // find inverse
     int x, y;
     gcd_extended(E, phi, x, y);
     x = (x%phi + phi) % phi;
      
-    cout << binpow(C, x, N) << endl;
+    cout << fexp(C, x, N) << endl;
     exit(0);
 }
