@@ -57,6 +57,7 @@ int main(){ _
     
     ll phi = (P-1)*(Q-1);
     auto [a, x, b] = mdc(E, phi); 
+    x = (x%phi + phi) % phi;
     cout << fexp(C, x, N) << endl;
     exit(0);
 }
