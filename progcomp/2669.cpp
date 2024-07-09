@@ -35,18 +35,73 @@ typedef vector<vd> vvd;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int main() {
-  _ string c;
-  cin >> c;
-  set<int> s;
-  for (int i = 0; i < sz(c); i++) {
-    ll curr = c[i] - 'a' + 1;
-    s.insert(curr);
-    for (int j = i + 1; j < sz(c); j++) {
-      curr += c[j] - 'a' + 1;
-      s.insert(curr);
-    }
+using cd = complex<double>;
+const double PI = acos(-1);
+
+void fft(vector<cd> &a, bool invert) {
+  int n = a.size();
+  if (n == 1)
+    return;
+
+  vector<cd> a0(n / 2), a1(n / 2);
+  for (int i = 0; 2 * i < n; i++) {
+    a0[i] = a[2 * i];
+    a1[i] = a[2 * i + 1];
   }
-  cout << sz(s) << endl;
+  fft(a0, invert);
+  fft(a1, invert);
+
+  double ang = 2 * PI / n * (invert ? -1 : 1);
+  cd w(1), wn(cos(ang), sin(ang));
+  for (int i = 0; 2 * i < n; i++) {
+    a[i] = a0[i] + w * a1[i];
+    a[i + n / 2] = a0[i] - w * a1[i];
+    if (invert) {
+      a[i] /= 2;
+      a[i + n / 2] /= 2;
+    }
+    w *= wn;
+  }
+}
+
+vector<int> multiply(vector<int> const &a, vector<int> const &b) {
+  vector<cd> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+  int n = 1;
+  while (n < a.size() + b.size())
+    n <<= 1;
+  fa.resize(n);
+  fb.resize(n);
+
+  fft(fa, false);
+  fft(fb, false);
+  for (int i = 0; i < n; i++)
+    fa[i] *= fb[i];
+  fft(fa, true);
+
+  vector<int> result(n);
+  for (int i = 0; i < n; i++)
+    result[i] = round(fa[i].real());
+  return result;
+}
+
+int main() {
+  string c;
+  cin >> c;
+  int n = sz(c);
+  vi prefix(n + 1);
+  prefix[1] = c[0] - 'a' + 1;
+  for (int i = 2; i <= n; i++) {
+    prefix[i] = prefix[i - 1] + (c[i - 1] - 'a' + 1);
+  }
+  vi p1(prefix.back() + 1);
+  vi p2(prefix.back() + 1);
+  for (auto &e : prefix) {
+    p1[e] = 1;
+    p2[prefix.back() - e] = 1;
+  }
+  auto res = multiply(p1, p2);
+  int ans=0;
+  for (int i = prefix.back()+1; i < sz(res);i++) ans+=res[i]>0;
+  cout << ans << endl;
   exit(0);
 }
