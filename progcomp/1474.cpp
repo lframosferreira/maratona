@@ -4,7 +4,9 @@
 
 using namespace std;
 
-#define _ ios_base::sync_with_stdio(0);cin.tie(0);
+#define _                                                                      \
+  ios_base::sync_with_stdio(0);                                                \
+  cin.tie(0);
 #define endl '\n'
 #define f first
 #define s second
@@ -14,7 +16,8 @@ using namespace std;
 #define dbg(x) cout << #x << " = " << x << endl
 
 typedef long long ll;
-typedef pair<int , int> pii;
+typedef unsigned long long ull;
+typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef vector<int> vi;
 typedef vector<vi> vvi;
@@ -23,45 +26,52 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-const ll MOD = 1e6;
-const ll MAX = 1e6+10; // nao é, arrumar dps
-// ACHEI SOLUCAO MAS TA BUGADA, ENVIA RCOM RUNTIME ERROR DE DIVI POR ZERO
+const ull MOD = 1e6;
 
-ll fat[MAX];
-ll n5, n10;
-
-ll fexp(ll a, ll b){
-    a %=MOD;
-    ll res=1;
-    while (b>0){
-        if (b&1) res *= a%MOD;
-        a*=a%MOD;
-        b>>=1;
-    }
-    return res;
-}
-
-ll get_fat(ll a){
-    if (a >= MOD) return 0;
-    return fat[a];
-}
-
-int main(){ _
-    ll N, K, L;
-    fat[0]=fat[1]=1;
-    for (int i = 2; i < MAX; i++) fat[i]=fat[i-1]*i%MOD;
-    while (cin >> N >> K >> L){
-        n10=0;
-        ll ans=0;
-        while (n10*10 <= N){
-            ll val10 = fexp(L, n10);  
-            n5 = (N-n10*10)/5;
-            ll val5=fexp(K, n5);
-            ll nperm = get_fat(n10+n5)/(get_fat(n10)*get_fat(n5));
-            ans+=(nperm*val5%MOD*val10%MOD);
-            n10++;
+struct Matrix {
+  ull m[2][2];
+  Matrix operator*(const Matrix &other) {
+    Matrix ret{{{0, 0}, {0, 0}}};
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          ret.m[i][k] += m[i][j] * other.m[j][k] % MOD;
+          ret.m[i][k] %= MOD;
         }
-        cout << setfill('0') << setw(6) << ans%MOD << endl;
+      }
     }
-    exit(0);
+    return ret;
+  }
+
+  friend ostream &operator<<(ostream &os, const Matrix &mat) {
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        os << mat.m[i][j] << " ";
+      }
+      os << endl;
+    }
+    return os;
+  }
+};
+
+Matrix fexp(struct Matrix a, ll b) {
+  struct Matrix res = {{{1, 0}, {0, 1}}};
+  while (b) {
+    if (b & 1)
+      res = res * a;
+    a = a * a;
+    b >>= 1;
+  }
+  return res;
+}
+
+int main() {
+  _ ull N, K, L;
+  while (cin >> N >> K >> L) {
+    struct Matrix mat = {{{0, L%MOD}, {1, K%MOD}}};
+    mat = fexp(mat, N / 5);
+    ull ans = mat.m[0][0] + (K%MOD * mat.m[1][0]) % MOD;
+    cout << setfill('0') << setw(6) << ans % MOD << endl;
+  }
+  exit(0);
 }
