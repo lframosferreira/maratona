@@ -13,6 +13,7 @@ using namespace std;
 #define dbg(x) cout << #x << " = " << x << endl
 
 typedef long long ll;
+typedef tuple<int, int , int> iii;
 typedef pair<int , int> pii;
 typedef pair<ll, ll> pll;
 typedef vector<int> vi;
@@ -21,27 +22,24 @@ typedef vector<ll> vll;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
-int gcd_extended(int a, int b, int& x, int& y) {
-    x = 1, y = 0;
-    int x1 = 0, y1 = 1, a1 = a, b1 = b;
-    while (b1) {
-        int q = a1 / b1;
-        tie(x, x1) = make_tuple(x1, x - q * x1);
-        tie(y, y1) = make_tuple(y1, y - q * y1);
-        tie(a1, b1) = make_tuple(b1, a1 - q * b1);
-    }
-    return a1;
-}
 
 ll fexp(ll a, ll b, ll mod){
     a %= mod;
     ll res = 1;
-    while (b>0){
+    while (b){
         if (b & 1) res = res*a%mod;
         a=a*a%mod;
         b >>=1;
     }
     return res;
+}
+
+tuple<ll, ll, ll> mdc(ll m, ll n){
+    if (m%n==0){
+        return make_tuple(n, 0, 1);
+    }
+    auto [d, xl, yl] = mdc(n, m%n);
+    return make_tuple(d, yl, xl-yl*(m/n));
 }
 
 
@@ -57,12 +55,8 @@ int main(){ _
         }
     }
     
-    int phi = (P-1)*(Q-1);
-
-    int x, y;
-    gcd_extended(E, phi, x, y);
-    x = (x%phi + phi) % phi;
-     
+    ll phi = (P-1)*(Q-1);
+    auto [a, x, b] = mdc(E, phi); 
     cout << fexp(C, x, N) << endl;
     exit(0);
 }
