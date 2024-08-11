@@ -35,13 +35,14 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 
 int main(){ _
     int n; cin >>n;
-    vi v(30);
+    map<ll, ll> mp;
     for (int i = 0;i < n; i++){
-        int t;cin >> t;v[t+10]++;
+        int t;cin >> t;
+        mp[t]++;
     }
-    ll ans=0;
-    for (int i = -10; i < 0;i++)ans+=(v[i+10]*v[10-i]);
-    if (v[10] > 1)ans+=((v[10]*(v[10]-1))/2);
+    ull ans=0;
+    for (int i = -10; i < 0;i++)ans+=(mp[i]*mp[-i]);
+    if (mp[0] > 1)ans+=((mp[0]*(mp[0]-1))/2);
     cout << ans << endl;
     exit(0);
 }
