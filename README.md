@@ -1,4 +1,4 @@
-# Maratona-de-Programacao
+# Maratona
 
 Alguns exercícios realizados durante estudos para competições de maratona de programação.
 
